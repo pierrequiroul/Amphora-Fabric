@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "create_vinery:block/fluid/juice" }
+    }
+}

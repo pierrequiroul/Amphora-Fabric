@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "vinery:wine_bottle"
+    },
+    {
+      "fluid": "create_vinery:apple_juice",
+      "amount": 40500
+    }
+  ],
+  "results": [
+    {
+      "item": "vinery:apple_juice"
+    }
+  ]
+}

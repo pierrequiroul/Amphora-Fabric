@@ -1,25 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "create_vinery",
   "version": "${version}",
-  "name": "Example Mod",
+  "name": "Create: Vinery",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "Peyrlac"
   ],
   "contact": {
     "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
   },
   "license": "CC0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/create_vinery/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.modid.ExampleMod"
+      "be.pierrelac.create_vinery.CreateVinery"
+    ],
+    "client": [
+      "be.pierrelac.create_vinery.client.ModClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "create_vinery.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

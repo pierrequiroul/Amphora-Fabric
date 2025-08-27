@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:bucket"
+    },
+    {
+      "fluid": "create_vinery:red_savanna_grape_juice",
+      "amount": 81000
+    }
+  ],
+  "results": [
+    {
+      "item": "create_vinery:red_savanna_grape_juice_bucket"
+    }
+  ]
+}
