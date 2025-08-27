@@ -1,0 +1,8 @@
+
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "minecraft:item/water_bucket",
+		"layer1": "create_vinery:item/red_jungle_grape_juice_bucket_layer"
+	}
+}

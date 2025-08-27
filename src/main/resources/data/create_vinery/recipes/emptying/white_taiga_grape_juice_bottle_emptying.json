@@ -1,10 +1,17 @@
 {
   "type": "create:emptying",
   "ingredients": [
-    { "item": "vinery:white_taiga_grapejuice" }
+    { 
+      "item": "vinery:white_taiga_grapejuice" 
+    }
   ],
   "results": [
-    { "item": "vinery:wine_bottle" },
-    { "fluid": "create_vinery:white_taiga_grape_juice", "amount": 40500 }
+    { 
+      "item": "vinery:wine_bottle" 
+    },
+    { 
+      "fluid": "create_vinery:white_taiga_grape_juice", 
+      "amount": 40500 
+    }
   ]
 }

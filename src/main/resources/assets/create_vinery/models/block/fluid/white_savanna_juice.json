@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "particle": "create_vinery:fluid/potion_still",
-    "all": "create_vinery:fluid/potion_still"
-  }
-}

@@ -2,7 +2,7 @@
   "type": "create:filling",
   "ingredients": [
     {
-      "item": "minecraft:glass_bottle"
+      "item": "vinery:wine_bottle"
     },
     {
       "fluid": "create_vinery:red_grape_juice",

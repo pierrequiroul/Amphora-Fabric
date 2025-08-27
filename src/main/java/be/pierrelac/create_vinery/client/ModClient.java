@@ -1,17 +1,15 @@
 package be.pierrelac.create_vinery.client;
 
 import be.pierrelac.create_vinery.ModFluids;
+import be.pierrelac.create_vinery.CreateVinery;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockAndTintGetter;
+import be.pierrelac.create_vinery.client.FluidRenderHandlerFactory;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
-import javax.annotation.Nullable;
+// imports cleaned
 
 @Environment(EnvType.CLIENT)
 public class ModClient implements ClientModInitializer {
@@ -25,25 +23,29 @@ public class ModClient implements ClientModInitializer {
             if (done[0]) return;
             if (ModFluids.JUICE_FLUIDS.isEmpty()) return;
             ModFluids.JUICE_FLUIDS.forEach((key, entry) -> {
-                int color = ModFluids.JUICE_COLORS.getOrDefault(key, 0xFFFFFF) | 0xFF000000;
-                FluidVariantRenderHandler handler = new FluidVariantRenderHandler() {
-                    @Override
-                    public int getColor(FluidVariant fluidVariant, @Nullable BlockAndTintGetter view, @Nullable BlockPos pos) {
-                        return color;
-                    }
-
-                    @Override
-                    public void appendTooltip(FluidVariant fluidVariant, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag tooltipContext) {
-                        // no-op
-                    }
-                };
+                int color = ModFluids.JUICE_COLORS.getOrDefault(key, 0xFFFFFF);
+                var handler = FluidRenderHandlerFactory.colorHandler(color);
                 try {
                     var fluidEntry = entry.get();
+                    // Log the expected texture locations and check they exist in resources (best-effort via getResource)
+                    try {
+                        var stillLoc = new net.minecraft.resources.ResourceLocation("create_vinery", "fluid/juice_still");
+                        var flowLoc = new net.minecraft.resources.ResourceLocation("create_vinery", "fluid/juice_flow");
+                        var mgr = net.minecraft.client.Minecraft.getInstance().getResourceManager();
+                        var r1 = mgr.getResource(stillLoc);
+                        var r2 = mgr.getResource(flowLoc);
+                        CreateVinery.LOGGER.info("Found textures for {}: still={}, flow={}", key, r1 != null, r2 != null);
+                    } catch (Exception texEx) {
+                        CreateVinery.LOGGER.warn("Could not verify textures for {}: {}", key, texEx.toString());
+                    }
+
                     FluidVariantRendering.register(fluidEntry.getSource(), handler);
                     FluidVariantRendering.register(fluidEntry.getFlowing(), handler);
+                    CreateVinery.LOGGER.info("Registered fluid render handler for {} (source={}, flowing={}) with color=0x{}", key, fluidEntry.getSource(), fluidEntry.getFlowing(), Integer.toHexString(color));
                 } catch (Exception e) {
                     try {
                         FluidVariantRendering.register(entry.getSource(), handler);
+                        CreateVinery.LOGGER.info("Registered fluid render handler for {} (entry source) with color=0x{}", key, Integer.toHexString(color));
                     } catch (Throwable ignored) {}
                 }
             });

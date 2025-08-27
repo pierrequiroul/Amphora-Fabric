@@ -1,5 +1,19 @@
 package be.pierrelac.create_vinery;
 
+/**
+ * Entrypoint principal du mod Create: Vinery.
+ * 
+ * RESPONSABILITÉS :
+ * - Initialisation du mod (creative tab, fluides)
+ * - Fournit les utilitaires partagés (registrate, logger, resource locations)
+ * 
+ * STRUCTURE DU MOD :
+ * - JuiceTypes.java : définit tous les jus (id, nom, couleur)
+ * - ModFluids.java : enregistre les fluides basés sur JuiceTypes
+ * - FabricFluidHelpers.java : intégration Fabric (stockage bouteilles/seaux)
+ * - client/* : rendu côté client (couleurs, handlers)
+ */
+
 import be.pierrelac.create_vinery.ModFluids;
 import be.pierrelac.create_vinery.ModCreativeTab;
 import com.simibubi.create.Create;
