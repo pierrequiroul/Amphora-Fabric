@@ -18,7 +18,7 @@
       "be.pierrelac.create_vinery.CreateVinery"
     ],
     "client": [
-      "be.pierrelac.create_vinery.client.ModClient"
+      "be.pierrelac.create_vinery.CreateVineryClient"
     ]
   },
   "mixins": [

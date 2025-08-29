@@ -1,9 +1,0 @@
-{
-  "loader": "minecraft:fluid",
-  "render_type": "translucent",
-  "textures": {
-    "still": "minecraft:block/water_still",
-    "flow": "minecraft:block/water_flow",
-    "particle": "minecraft:block/water_still"
-  }
-}

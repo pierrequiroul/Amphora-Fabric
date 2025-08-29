@@ -1,23 +1,5 @@
 package be.pierrelac.create_vinery;
 
-/**
- * Entrypoint principal du mod Create: Vinery.
- * 
- * RESPONSABILITÉS :
- * - Initialisation du mod (creative tab, fluides)
- * - Fournit les utilitaires partagés (registrate, logger, resource locations)
- * 
- * STRUCTURE DU MOD :
- * - JuiceTypes.java : définit tous les jus (id, nom, couleur)
- * - ModFluids.java : enregistre les fluides basés sur JuiceTypes
- * - FabricFluidHelpers.java : intégration Fabric (stockage bouteilles/seaux)
- * - client/* : rendu côté client (couleurs, handlers)
- */
-
-import be.pierrelac.create_vinery.ModFluids;
-import be.pierrelac.create_vinery.ModCreativeTab;
-import com.simibubi.create.Create;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -27,33 +9,20 @@ public class CreateVinery implements ModInitializer {
     public static final String ID = "create_vinery";
     public static final String NAME = "Create: Vinery";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-    
-    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
-    public static final CreateVinery INSTANCE = new CreateVinery();
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Create addon mod [{}] is loading alongside Create [{}]!", NAME, Create.VERSION);
+        LOGGER.info("Initializing Create: Vinery with pure Fabric API approach");
         
-        // Enregistrer d'abord le Creative Tab
+        // Enregistrer les fluides avec Fabric API pur
+        ModFluids.register();
+        
+        // Enregistrer le Creative Tab 
         ModCreativeTab.register();
         
-        // Configurer le REGISTRATE pour utiliser notre tab et le placer après l'onglet de Create
-        REGISTRATE.setCreativeTab(ModCreativeTab.getTabKey());
-        
-        // Enregistrer les fluides (ceci enregistrera aussi les seaux et autres items associés)
-        ModFluids.register();
-
-        // S'assurer que le REGISTRATE a fini d'enregistrer tous les objets
-        REGISTRATE.register();
-        
-        LOGGER.info("Successfully registered juice fluids for Create integration");
+        LOGGER.info("Successfully registered {} juice fluids with Fabric API", ModFluids.STILL_FLUIDS.size());
     }
     
-    public static CreateRegistrate registrate() {
-        return REGISTRATE;
-    }
-
     public static ResourceLocation id(String path) {
         return new ResourceLocation(ID, path);
     }

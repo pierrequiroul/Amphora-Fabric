@@ -1,8 +1,7 @@
-
 {
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "minecraft:item/water_bucket",
-		"layer1": "create_vinery:item/red_savanna_grape_juice_bucket_layer"
-	}
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "minecraft:item/bucket",
+    "layer1": "create_vinery:item/juice_bucket_layer"
+  }
 }

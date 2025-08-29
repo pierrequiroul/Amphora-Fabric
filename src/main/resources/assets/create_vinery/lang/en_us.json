@@ -1,5 +1,7 @@
 {
   "itemGroup.create_vinery.main": "Create: Vinery",
+  
+  "_comment_fluids": "Fluid display names (for JEI/EMI compatibility)",
   "fluid.create_vinery.red_grape_juice": "Red Grape Juice",
   "fluid.create_vinery.white_grape_juice": "White Grape Juice",
   "fluid.create_vinery.red_savanna_grape_juice": "Red Savanna Grape Juice",
@@ -9,7 +11,21 @@
   "fluid.create_vinery.red_jungle_grape_juice": "Red Jungle Grape Juice",
   "fluid.create_vinery.white_jungle_grape_juice": "White Jungle Grape Juice",
   "fluid.create_vinery.apple_juice": "Apple Juice",
+  "fluid.create_vinery.cherry_juice": "Cherry Juice",
   
+  "_comment_blocks": "Block names (actual display names used by Minecraft)",
+  "block.create_vinery.red_grape_juice": "Red Grape Juice",
+  "block.create_vinery.white_grape_juice": "White Grape Juice",
+  "block.create_vinery.red_savanna_grape_juice": "Red Savanna Grape Juice",
+  "block.create_vinery.white_savanna_grape_juice": "White Savanna Grape Juice",
+  "block.create_vinery.red_taiga_grape_juice": "Red Taiga Grape Juice",
+  "block.create_vinery.white_taiga_grape_juice": "White Taiga Grape Juice",
+  "block.create_vinery.red_jungle_grape_juice": "Red Jungle Grape Juice",
+  "block.create_vinery.white_jungle_grape_juice": "White Jungle Grape Juice",
+  "block.create_vinery.apple_juice": "Apple Juice",
+  "block.create_vinery.cherry_juice": "Cherry Juice",
+  
+  "_comment_buckets": "Bucket item names",
   "item.create_vinery.red_grape_juice_bucket": "Red Grape Juice Bucket",
   "item.create_vinery.white_grape_juice_bucket": "White Grape Juice Bucket",
   "item.create_vinery.red_savanna_grape_juice_bucket": "Red Savanna Grape Juice Bucket",
@@ -18,5 +34,6 @@
   "item.create_vinery.white_taiga_grape_juice_bucket": "White Taiga Grape Juice Bucket",
   "item.create_vinery.red_jungle_grape_juice_bucket": "Red Jungle Grape Juice Bucket",
   "item.create_vinery.white_jungle_grape_juice_bucket": "White Jungle Grape Juice Bucket",
-  "item.create_vinery.apple_juice_bucket": "Apple Juice Bucket"
+  "item.create_vinery.apple_juice_bucket": "Apple Juice Bucket",
+  "item.create_vinery.cherry_juice_bucket": "Cherry Juice Bucket"
 }

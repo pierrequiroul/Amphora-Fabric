@@ -1,0 +1,45 @@
+package be.pierrelac.create_vinery;
+
+import be.pierrelac.create_vinery.items.JuiceBucketItem;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Gestion de tous les items du mod Create: Vinery
+ */
+public class ModItems {
+    
+    // Registre pour tous les seaux de jus
+    public static final Map<String, Item> FLUID_BUCKETS = new HashMap<>();
+    
+    /**
+     * Enregistre un seau de jus avec couleur pour tinting
+     */
+    public static void registerJuiceBucket(String juiceId, Fluid stillFluid, int color) {
+        String bucketName = juiceId + "_juice_bucket";
+        ResourceLocation bucketId = new ResourceLocation("create_vinery", bucketName);
+        
+        var bucketItem = new JuiceBucketItem(stillFluid, color, new Item.Properties()
+                .craftRemainder(Items.BUCKET)
+                .stacksTo(1));
+        
+        Registry.register(BuiltInRegistries.ITEM, bucketId, bucketItem);
+        FLUID_BUCKETS.put(juiceId, bucketItem);
+        
+        CreateVinery.LOGGER.info("✓ Registered juice bucket: {} with color 0x{}", bucketName, Integer.toHexString(color));
+    }
+    
+    /**
+     * Getter pour un seau de jus spécifique
+     */
+    public static Item getBucketItem(String juiceId) {
+        return FLUID_BUCKETS.get(juiceId);
+    }
+}

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/fluid",
-  "textures": {
-    "still": "create_vinery:fluid/juice_still",
-    "flow":  "create_vinery:fluid/juice_flow",
-    "particle": "create_vinery:fluid/juice_still"
-  }
-}

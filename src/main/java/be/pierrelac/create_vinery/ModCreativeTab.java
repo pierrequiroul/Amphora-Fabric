@@ -1,48 +1,46 @@
 package be.pierrelac.create_vinery;
 
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+/**
+ * Gestion de l'onglet créatif du mod Create: Vinery.
+ * 
+ * Cet onglet contient tous les seaux de jus du mod.
+ */
 public class ModCreativeTab {
-    private static CreativeModeTab TAB;
-
-    public static final ResourceKey<CreativeModeTab> TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(CreateVinery.ID, "main"));
-
+    private static ResourceKey<CreativeModeTab> TAB_KEY;
+    
     public static void register() {
-        // Créer et enregistrer l'onglet créatif
-        TAB = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            TAB_KEY,
-            FabricItemGroup.builder()
-                .icon(() -> new ItemStack(Items.GLASS_BOTTLE))
-                .title(Component.translatable("itemGroup." + CreateVinery.ID + ".main"))
-                .displayItems((context, entries) -> {
-                    // Ajouter les seaux de fluides au tab créatif
-                    ModFluids.JUICE_FLUIDS.values().forEach(fluidEntry -> {
-                        if (fluidEntry != null && fluidEntry.get() != null) {
-                            entries.accept(fluidEntry.get().getBucket());
-                        }
-                    });
-                })
-                .build());
-
-        CreateVinery.LOGGER.info("Registered Create: Vinery creative tab");
+        CreateVinery.LOGGER.info("Registering creative tab with Fabric fluid buckets");
+        
+        TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, CreateVinery.id("main"));
+        
+        CreativeModeTab tab = FabricItemGroup.builder()
+            .title(Component.translatable("itemGroup.create_vinery.main"))
+            .icon(() -> new ItemStack(Items.BUCKET)) // Icône temporaire
+            .displayItems((parameters, output) -> {
+                // Ajouter tous les seaux de jus depuis ModItems
+                ModItems.FLUID_BUCKETS.values().forEach(bucket -> {
+                    output.accept(new ItemStack(bucket));
+                });
+            })
+            .build();
+            
+        // Enregistrer l'onglet dans le registre de Minecraft
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAB_KEY, tab);
+        
+        CreateVinery.LOGGER.info("✓ Creative tab registered successfully");
     }
-
+    
     public static ResourceKey<CreativeModeTab> getTabKey() {
         return TAB_KEY;
-    }
-
-    public static CreativeModeTab getTab() {
-        return TAB;
     }
 }

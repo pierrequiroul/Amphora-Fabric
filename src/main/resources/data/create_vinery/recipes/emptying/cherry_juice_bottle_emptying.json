@@ -1,0 +1,17 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    { 
+      "item": "create_vinery:cherry_juice" 
+    }
+  ],
+  "results": [
+    { 
+      "item": "vinery:wine_bottle" 
+    },
+    { 
+      "fluid": "create_vinery:cherry_juice", 
+      "amount": 40500 
+    }
+  ]
+}

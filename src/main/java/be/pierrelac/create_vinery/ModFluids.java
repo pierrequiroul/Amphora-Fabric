@@ -1,163 +1,338 @@
 package be.pierrelac.create_vinery;
 
-import com.simibubi.create.AllFluids;
-import com.simibubi.create.AllTags;
-import com.simibubi.create.AllTags.AllFluidTags;
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.tterrag.registrate.util.entry.FluidEntry;
-import com.tterrag.registrate.fabric.SimpleFlowableFluid;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.minecraft.network.chat.Component;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
-import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.DispensibleContainerItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
-import static net.minecraft.world.item.Items.BUCKET;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Centralise l'enregistrement des fluides "juice" du mod.
- *
- * Cette classe garde seulement la logique de création/stockage des fluides
- * et des métadonnées (couleur). Le code client (rendering) est dans `client`.
+ * Fluides de jus créés avec Fabric API - approche minimaliste
  */
 public class ModFluids {
-    private static final CreateRegistrate REGISTRATE = CreateVinery.registrate();
-
-    public static final FluidEntry<SimpleFlowableFluid.Flowing> JUICE =
-		REGISTRATE.standardFluid("juice")
-			.lang("Juice")
-			.fluidProperties(p -> p.levelDecreasePerBlock(2)
-				.tickRate(25)
-				.flowSpeed(3)
-				.blastResistance(100f))
-			.fluidAttributes(() -> new JuiceAttributeHandler("block.create_vinery.juice", 2000, 1400))
-			.tag(FluidTags.WATER) // fabric: water tag controls physics
-			.source(SimpleFlowableFluid.Source::new) // TODO: remove when Registrate fixes FluidBuilder
-			.block()
-			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
-			.build()
-			.bucket()
-			.onRegister(ModFluids::registerFluidDispenseBehavior)
-			.tag(AllTags.forgeItemTag("juice_buckets"))
-			.build()
-			.onRegisterAfter(Registries.ITEM, juice -> {
-				Fluid source = juice.getSource();
-				FluidStorage.combinedItemApiProvider(source.getBucket()).register(context ->
-					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(source), FluidConstants.BUCKET));
-				FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
-					new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(source.getBucket()), source, FluidConstants.BUCKET));
-			})
-			.register();
-
-    private static final DispenseItemBehavior DEFAULT = new DefaultDispenseItemBehavior();
-	private static final DispenseItemBehavior DISPENSE_FLUID = new DefaultDispenseItemBehavior(){
-			@Override
-			protected ItemStack execute(BlockSource pSource, ItemStack pStack) {
-				DispensibleContainerItem dispensibleContainerItem = (DispensibleContainerItem) pStack.getItem();
-				BlockPos pos = pSource.getPos().relative(pSource.getBlockState().getValue(DispenserBlock.FACING));
-				Level level = pSource.getLevel();
-				if (dispensibleContainerItem.emptyContents(null, level, pos, null)) {
-					return new ItemStack(Items.BUCKET);
-				}
-				return DEFAULT.dispense(pSource, pStack);
-			}
-		};
-
-	private static void registerFluidDispenseBehavior(BucketItem bucket) {
-		DispenserBlock.registerBehavior(bucket, DISPENSE_FLUID);
-	}
-
-    public static final Map<String, FluidEntry<SimpleFlowableFluid.Flowing>> JUICE_FLUIDS = new HashMap<>();
-    // Store the display color for each registered juice (0xRRGGBB)
+    
+    // Registres pour nos fluides - les blocs et items sont maintenant gérés dans ModBlocks et ModItems
+    public static final Map<String, SimpleJuiceFluid.Still> STILL_FLUIDS = new HashMap<>();
+    public static final Map<String, SimpleJuiceFluid.Flowing> FLOWING_FLUIDS = new HashMap<>();
+    
+    // Couleurs pour chaque type de jus
     public static final Map<String, Integer> JUICE_COLORS = new HashMap<>();
     
-    // Un seau = 4 bouteilles (comme le miel dans Create)
-    public static final long JUICE_BOTTLE_AMOUNT = FluidConstants.BUCKET / 2;
-
+    // Informations complètes pour chaque fluide (ID, couleur, clés de traduction)
+    public static final Map<String, FluidInfo> FLUID_DEFINITIONS = new HashMap<>();
+    
+    /**
+     * Classe contenant toutes les informations d'un fluide
+     */
+    public static class FluidInfo {
+        public final String id;
+        public final int color;
+        public final String fluidTranslationKey;
+        public final String bucketTranslationKey;
+        
+        public FluidInfo(String id, int color, String fluidTranslationKey, String bucketTranslationKey) {
+            this.id = id;
+            this.color = color;
+            this.fluidTranslationKey = fluidTranslationKey;
+            this.bucketTranslationKey = bucketTranslationKey;
+        }
+    }
+    
+    static {
+        // Définir tous les fluides avec leurs informations complètes
+        // Note: Les fluides utilisent les clés "block." car ils sont enregistrés comme LiquidBlock
+        FLUID_DEFINITIONS.put("red_grape", new FluidInfo(
+            "red_grape", 0x6e386c, 
+            "block.create_vinery.red_grape_juice", 
+            "item.create_vinery.red_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("white_grape", new FluidInfo(
+            "white_grape", 0x80c04c,
+            "block.create_vinery.white_grape_juice",
+            "item.create_vinery.white_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("red_savanna_grape", new FluidInfo(
+            "red_savanna_grape", 0xa23661,
+            "block.create_vinery.red_savanna_grape_juice",
+            "item.create_vinery.red_savanna_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("white_savanna_grape", new FluidInfo(
+            "white_savanna_grape", 0xbbbd44,
+            "block.create_vinery.white_savanna_grape_juice",
+            "item.create_vinery.white_savanna_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("red_taiga_grape", new FluidInfo(
+            "red_taiga_grape", 0x6633a4,
+            "block.create_vinery.red_taiga_grape_juice",
+            "item.create_vinery.red_taiga_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("white_taiga_grape", new FluidInfo(
+            "white_taiga_grape", 0x77b476,
+            "block.create_vinery.white_taiga_grape_juice",
+            "item.create_vinery.white_taiga_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("red_jungle_grape", new FluidInfo(
+            "red_jungle_grape", 0x943682,
+            "block.create_vinery.red_jungle_grape_juice",
+            "item.create_vinery.red_jungle_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("white_jungle_grape", new FluidInfo(
+            "white_jungle_grape", 0xabbb5c,
+            "block.create_vinery.white_jungle_grape_juice",
+            "item.create_vinery.white_jungle_grape_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("apple", new FluidInfo(
+            "apple", 0xe8be72,
+            "block.create_vinery.apple_juice",
+            "item.create_vinery.apple_juice_bucket"
+        ));
+        FLUID_DEFINITIONS.put("cherry", new FluidInfo(
+            "cherry", 0xc44b55,
+            "block.create_vinery.cherry_juice",
+            "item.create_vinery.cherry_juice_bucket"
+        ));
+        
+        // Remplir la map des couleurs pour compatibilité
+        for (FluidInfo info : FLUID_DEFINITIONS.values()) {
+            JUICE_COLORS.put(info.id, info.color);
+        }
+    }
+    
     public static void register() {
-        // Enregistrement de tous les types de jus définis dans l'enum
-        for (JuiceTypes juiceType : JuiceTypes.values()) {
-            registerJuiceFluid(juiceType.getId(), juiceType.getTranslationKey(), juiceType.getColor());
+        CreateVinery.LOGGER.info("=== REGISTERING MINIMAL FABRIC FLUIDS ===");
+        
+        // Créer chaque fluide de jus avec ses informations complètes
+        for (FluidInfo fluidInfo : FLUID_DEFINITIONS.values()) {
+            String fluidName = fluidInfo.id + "_juice";
+            CreateVinery.LOGGER.info("Creating minimal Fabric fluid: {} with translation keys", fluidName);
+            
+            registerJuiceFluid(fluidInfo);
+        }
+        
+        CreateVinery.LOGGER.info("=== MINIMAL FABRIC FLUIDS REGISTERED ===");
+    }
+    
+    private static void registerJuiceFluid(FluidInfo fluidInfo) {
+        try {
+            String juiceId = fluidInfo.id;
+            String fluidName = juiceId + "_juice";
+            
+            CreateVinery.LOGGER.info("Attempting fluid registration for: {} with translations [fluid: {}, bucket: {}]", 
+                fluidName, fluidInfo.fluidTranslationKey, fluidInfo.bucketTranslationKey);
+            
+            // Créer d'abord les ResourceLocations
+            ResourceLocation stillId = new ResourceLocation("create_vinery", fluidName);
+            ResourceLocation flowingId = new ResourceLocation("create_vinery", "flowing_" + fluidName);
+            
+            // Créer des instances simples de fluides - pas de références circulaires
+            var stillFluid = new SimpleJuiceFluid.Still();
+            var flowingFluid = new SimpleJuiceFluid.Flowing();
+            
+            // Enregistrer d'abord les fluides de base
+            Registry.register(BuiltInRegistries.FLUID, stillId, stillFluid);
+            Registry.register(BuiltInRegistries.FLUID, flowingId, flowingFluid);
+            
+            // Après l'enregistrement, configurer les liens
+            stillFluid.setFlowing(flowingFluid);
+            flowingFluid.setStill(stillFluid);
+            
+            // Utiliser ModBlocks pour enregistrer le bloc liquide
+            var fluidBlock = ModBlocks.registerFluidBlock(juiceId, stillFluid);
+            stillFluid.setBlock(fluidBlock);
+            flowingFluid.setBlock(fluidBlock);
+            
+            // Utiliser ModItems pour enregistrer le seau
+            ModItems.registerJuiceBucket(juiceId, stillFluid, fluidInfo.color);
+            var bucketItem = ModItems.getBucketItem(juiceId);
+            stillFluid.setBucket(bucketItem);
+            flowingFluid.setBucket(bucketItem);
+            
+            // Stocker dans nos maps
+            STILL_FLUIDS.put(juiceId, stillFluid);
+            FLOWING_FLUIDS.put(juiceId, flowingFluid);
+            
+            CreateVinery.LOGGER.info("✓ Successfully registered fluid: {} ({}) with translations", juiceId, fluidName);
+            
+        } catch (Exception e) {
+            CreateVinery.LOGGER.error("✗ Failed to register fluid {}: ", fluidInfo.id, e);
         }
     }
-
-    private record JuiceAttributeHandler(Component name, int viscosity, boolean lighterThanAir) implements FluidVariantAttributeHandler {
-        private JuiceAttributeHandler(String translationKey, int viscosity, int density) {
-            this(Component.translatable(translationKey), viscosity, density <= 0);
-        }
-
-        @Override
-        public Component getName(FluidVariant fluidVariant) {
-            return name.copy();
-        }
-
-        @Override
-        public int getViscosity(FluidVariant variant, @Nullable Level world) {
-            return viscosity;
-        }
-
-        @Override
-        public boolean isLighterThanAir(FluidVariant variant) {
-            return lighterThanAir;
-        }
+    
+    // Getters pour compatibilité avec le code existant
+    public static Integer getJuiceColor(String juiceId) {
+        return JUICE_COLORS.get(juiceId);
     }
-
-    private static void registerJuiceFluid(String id, String translationKey, int color) {
-        String fluidId = id + "_juice";
-        CreateVinery.LOGGER.info("Registering juice fluid {} with translationKey={} color=0x{}", fluidId, translationKey, Integer.toHexString(color));
-        CreateVinery.LOGGER.info("Expected shared fluid textures = create_vinery:fluid/juice_still and create_vinery:fluid/juice_flow");
-
-        // Création du fluide avec Create (utilise une translation key pour le nom)
-        FluidEntry<SimpleFlowableFluid.Flowing> entry = REGISTRATE
-                .standardFluid(fluidId)
-                .lang(translationKey)
-                .fluidProperties(props -> props
-                    .levelDecreasePerBlock(2)
-                    .tickRate(25)
-                    .flowSpeed(3)
-                    .blastResistance(100f)
-                )
-                .fluidAttributes(() -> new JuiceAttributeHandler(translationKey, 1500, 1400))
-                .source(SimpleFlowableFluid.Source::new)
-                .block()
-                .properties(p -> p.mapColor(MapColor.COLOR_PURPLE))
-                .build()
-                .bucket()
-                .build()
-                .onRegisterAfter(Registries.ITEM, juice -> {
-                    Fluid source = juice.getSource();
-                    FabricFluidHelpers.registerItemStoragesForJuice(source, source.getBucket(), JUICE_BOTTLE_AMOUNT);
-                })
-                .register();
-
-        // Stockage du fluide pour référence ultérieure
-        JUICE_FLUIDS.put(id, entry);
-        // Stocker la couleur pour le rendu client
-        JUICE_COLORS.put(id, color & 0xFFFFFF);
-    }    public static Fluid getFluid(String id) {
-        FluidEntry<SimpleFlowableFluid.Flowing> entry = JUICE_FLUIDS.get(id);
-        return entry != null ? entry.getSource() : Fluids.EMPTY;
+    
+    // Nouveaux getters pour les informations de fluide avec traductions
+    public static FluidInfo getFluidInfo(String juiceId) {
+        return FLUID_DEFINITIONS.get(juiceId);
+    }
+    
+    public static String getFluidTranslationKey(String juiceId) {
+        FluidInfo info = FLUID_DEFINITIONS.get(juiceId);
+        return info != null ? info.fluidTranslationKey : null;
+    }
+    
+    public static String getBucketTranslationKey(String juiceId) {
+        FluidInfo info = FLUID_DEFINITIONS.get(juiceId);
+        return info != null ? info.bucketTranslationKey : null;
+    }
+    
+    public static Fluid getStillFluid(String juiceId) {
+        return STILL_FLUIDS.get(juiceId);
+    }
+    
+    public static Fluid getFlowingFluid(String juiceId) {
+        return FLOWING_FLUIDS.get(juiceId);
+    }
+    
+    public static Block getFluidBlock(String juiceId) {
+        return ModBlocks.getFluidBlock(juiceId);
+    }
+    
+    public static Item getBucketItem(String juiceId) {
+        return ModItems.getBucketItem(juiceId);
+    }
+    
+    /**
+     * Fluide de jus minimaliste avec implémentation directe des méthodes requises
+     */
+    public static abstract class SimpleJuiceFluid extends FlowingFluid {
+        protected Fluid flowing;
+        protected Fluid still;
+        protected LiquidBlock block;
+        protected Item bucket;
+        
+        public void setFlowing(Fluid flowing) {
+            this.flowing = flowing;
+        }
+        
+        public void setStill(Fluid still) {
+            this.still = still;
+        }
+        
+        public void setBlock(LiquidBlock block) {
+            this.block = block;
+        }
+        
+        public void setBucket(Item bucket) {
+            this.bucket = bucket;
+        }
+        
+        @Override
+        public Fluid getFlowing() {
+            return flowing;
+        }
+        
+        @Override
+        public Fluid getSource() {
+            return still;
+        }
+        
+        @Override
+        public Item getBucket() {
+            return bucket;
+        }
+        
+        @Override
+        public boolean canConvertToSource(@Nonnull Level level) {
+            return false;
+        }
+        
+        @Override
+        protected void beforeDestroyingBlock(@Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockState state) {
+            // Pas d'effet
+        }
+        
+        @Override
+        protected int getSlopeFindDistance(@Nonnull LevelReader level) {
+            return 4;
+        }
+        
+        @Override
+        protected int getDropOff(@Nonnull LevelReader level) {
+            return 1;
+        }
+        
+        @Override
+        public int getTickDelay(@Nonnull LevelReader level) {
+            return 5;
+        }
+        
+        @Override
+        protected float getExplosionResistance() {
+            return 100.0F;
+        }
+        
+        @Override
+        protected @Nonnull BlockState createLegacyBlock(@Nonnull FluidState state) {
+            return block.defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        }
+        
+        @Override
+        public boolean canBeReplacedWith(@Nonnull FluidState fluidState, @Nonnull BlockGetter blockGetter, @Nonnull BlockPos blockPos, @Nonnull Fluid fluid, @Nonnull Direction direction) {
+            return false;
+        }
+        
+        public static class Still extends SimpleJuiceFluid {
+            @Override
+            public int getAmount(@Nonnull FluidState state) {
+                return 8;
+            }
+            
+            @Override
+            public boolean isSource(@Nonnull FluidState state) {
+                return true;
+            }
+            
+            @Override
+            public Fluid getSource() {
+                return this;  // Le fluide Still retourne lui-même
+            }
+            
+            @Override
+            protected void createFluidStateDefinition(@Nonnull StateDefinition.Builder<Fluid, FluidState> builder) {
+                builder.add(FALLING);  // Ajouter la propriété FALLING pour compatibilité
+            }
+        }
+        
+        public static class Flowing extends SimpleJuiceFluid {
+            @Override
+            public int getAmount(@Nonnull FluidState state) {
+                return state.getValue(LEVEL);
+            }
+            
+            @Override
+            public boolean isSource(@Nonnull FluidState state) {
+                return false;
+            }
+            
+            @Override
+            public Fluid getSource() {
+                return still != null ? still : this;  // Retourne le fluide Still si disponible
+            }
+            
+            @Override
+            protected void createFluidStateDefinition(@Nonnull StateDefinition.Builder<Fluid, FluidState> builder) {
+                builder.add(LEVEL);
+                builder.add(FALLING);  // Ajouter la propriété FALLING pour compatibilité
+            }
+        }
     }
 }
