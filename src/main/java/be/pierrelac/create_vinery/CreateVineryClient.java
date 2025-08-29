@@ -1,12 +1,18 @@
 package be.pierrelac.create_vinery;
 
+import be.pierrelac.create_vinery.blockentity.ModBlockEntities;
+import be.pierrelac.create_vinery.client.ModPartials;
+import be.pierrelac.create_vinery.client.renderer.MechanicalJuicePressRenderer;
 import be.pierrelac.create_vinery.items.JuiceBucketItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 
 @Environment(EnvType.CLIENT)
@@ -16,8 +22,13 @@ public class CreateVineryClient implements ClientModInitializer {
     public void onInitializeClient() {
         CreateVinery.LOGGER.info("Initializing Create: Vinery client with pure Fabric fluid rendering");
         
+        // Enregistrer les partials pour l'animation
+        ModPartials.init();
+        
         registerFluidRendering();
         registerBucketColors();
+        registerBlockEntityRenderers();
+        registerBlockRenderLayers();
         
         CreateVinery.LOGGER.info("Create: Vinery client initialization complete");
     }
@@ -70,5 +81,20 @@ public class CreateVineryClient implements ClientModInitializer {
         });
         
         CreateVinery.LOGGER.info("Bucket color registration complete");
+    }
+    
+    private static void registerBlockEntityRenderers() {
+        BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_JUICE_PRESS, MechanicalJuicePressRenderer::new);
+        CreateVinery.LOGGER.info("Registered BlockEntity renderer for mechanical juice press");
+    }
+    
+    /**
+     * Configure les RenderLayers pour les blocs avec transparence alpha
+     */
+    private static void registerBlockRenderLayers() {
+        // Activer la transparence alpha pour le châssis de la presse à jus mécanique
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MECHANICAL_JUICE_PRESS, RenderType.cutout());
+        
+        CreateVinery.LOGGER.info("Registered block render layers for transparency support");
     }
 }

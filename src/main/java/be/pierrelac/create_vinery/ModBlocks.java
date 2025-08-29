@@ -1,5 +1,6 @@
 package be.pierrelac.create_vinery;
 
+import be.pierrelac.create_vinery.blocks.MechanicalJuicePressBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -19,6 +20,22 @@ public class ModBlocks {
     
     // Registre pour tous les blocs de fluide
     public static final Map<String, Block> FLUID_BLOCKS = new HashMap<>();
+    
+    // Blocs mécaniques
+    public static final Block MECHANICAL_JUICE_PRESS = Registry.register(
+        BuiltInRegistries.BLOCK,
+        new ResourceLocation(CreateVinery.ID, "mechanical_juice_press"),
+        new MechanicalJuicePressBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque())
+    );
+    
+    /**
+     * Méthode d'enregistrement pour s'assurer que tous les blocs sont initialisés
+     */
+    public static void register() {
+        CreateVinery.LOGGER.info("Registering Create: Vinery blocks");
+        // Les blocs statiques sont déjà enregistrés, cette méthode force l'initialisation de la classe
+        CreateVinery.LOGGER.info("✓ Blocks registered successfully");
+    }
     
     /**
      * Enregistre un bloc de fluide liquide

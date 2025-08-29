@@ -35,5 +35,8 @@
   "item.create_vinery.red_jungle_grape_juice_bucket": "Red Jungle Grape Juice Bucket",
   "item.create_vinery.white_jungle_grape_juice_bucket": "White Jungle Grape Juice Bucket",
   "item.create_vinery.apple_juice_bucket": "Apple Juice Bucket",
-  "item.create_vinery.cherry_juice_bucket": "Cherry Juice Bucket"
+  "item.create_vinery.cherry_juice_bucket": "Cherry Juice Bucket",
+  
+  "_comment_bottles": "Bottle item names",
+  "item.create_vinery.cherry_juice_bottle": "Cherry Juice Bottle"
 }

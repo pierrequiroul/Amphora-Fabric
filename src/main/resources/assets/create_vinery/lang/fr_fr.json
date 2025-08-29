@@ -35,5 +35,8 @@
     "item.create_vinery.apple_juice_bucket": "Seau de jus de pomme",
     "item.create_vinery.cherry_juice_bucket": "Seau de jus de cerise",
 
+    "_comment_bottles": "Noms des bouteilles",
+    "item.create_vinery.cherry_juice_bottle": "Bouteille de jus de cerise",
+
     "itemGroup.create_vinery.main": "Create: Vinery"
 }

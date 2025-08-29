@@ -4,6 +4,7 @@ import be.pierrelac.create_vinery.items.JuiceBucketItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
@@ -18,6 +19,20 @@ public class ModItems {
     
     // Registre pour tous les seaux de jus
     public static final Map<String, Item> FLUID_BUCKETS = new HashMap<>();
+    
+    // Items de bloc
+    public static final Item MECHANICAL_JUICE_PRESS_ITEM = Registry.register(
+        BuiltInRegistries.ITEM,
+        new ResourceLocation(CreateVinery.ID, "mechanical_juice_press"),
+        new BlockItem(ModBlocks.MECHANICAL_JUICE_PRESS, new Item.Properties())
+    );
+    
+    // Items de bouteilles
+    public static final Item CHERRY_JUICE_BOTTLE = Registry.register(
+        BuiltInRegistries.ITEM,
+        new ResourceLocation(CreateVinery.ID, "cherry_juice_bottle"),
+        new Item(new Item.Properties().stacksTo(16))
+    );
     
     /**
      * Enregistre un seau de jus avec couleur pour tinting

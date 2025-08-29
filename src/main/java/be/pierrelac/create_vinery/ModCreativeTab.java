@@ -27,6 +27,12 @@ public class ModCreativeTab {
             .title(Component.translatable("itemGroup.create_vinery.main"))
             .icon(() -> new ItemStack(Items.BUCKET)) // Icône temporaire
             .displayItems((parameters, output) -> {
+                // Ajouter le pressoir mécanique
+                output.accept(new ItemStack(ModItems.MECHANICAL_JUICE_PRESS_ITEM));
+                
+                // Ajouter les bouteilles de jus
+                output.accept(new ItemStack(ModItems.CHERRY_JUICE_BOTTLE));
+                
                 // Ajouter tous les seaux de jus depuis ModItems
                 ModItems.FLUID_BUCKETS.values().forEach(bucket -> {
                     output.accept(new ItemStack(bucket));
