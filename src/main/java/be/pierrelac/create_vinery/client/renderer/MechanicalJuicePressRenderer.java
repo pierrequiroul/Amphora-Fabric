@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Renderer pour la presse à jus mécanique avec animation de vis et volant
+ * Synchronisé avec l'architecture du MechanicalMixer Create
  */
 public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<MechanicalJuicePressBlockEntity> {
 
@@ -29,15 +30,10 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
                             MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 
         Direction facing = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-
-        // Debug log pour vérifier que le renderer est appelé
-        // CreateVinery.LOGGER.info("Rendering mechanical juice press at {}", blockEntity.getBlockPos());
-
-        // Vérifier s'il y a de la force kinétique
         boolean hasKineticPower = Math.abs(blockEntity.getSpeed()) > 0;
 
-        // 1) Vis qui descend linéairement (seulement si alimentée)
-        float screwYOffset = hasKineticPower ? blockEntity.getScrewYOffset(partialTicks) : 0;
+        // 1) Vis qui descend avec animation en 3 phases (comme le MechanicalMixer)
+        float screwYOffset = hasKineticPower ? blockEntity.getRenderedHeadOffset(partialTicks) : 0;
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));
@@ -49,21 +45,25 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
             .renderInto(poseStack, bufferSource.getBuffer(RenderType.solid()));
         poseStack.popPose();
 
-        // 2) Volant/poignée qui tourne (seulement si alimentée)
-        float handleAngle = hasKineticPower ? blockEntity.getHandleAngleDeg(partialTicks) : 0;
+        // 2) Volant/poignée qui tourne avec vitesse variable selon la phase
+        float animationSpeed = hasKineticPower ? blockEntity.getAnimationSpeed(partialTicks) : 0;
+        float handleAngle = (blockEntity.getLevel().getGameTime() + partialTicks) * animationSpeed * 3f;
+
         poseStack.pushPose();
-        poseStack.translate(0.5, 0.5, 0.5);  // centrer
-        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));  // orientation du bloc
-        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(handleAngle));  // rotation du volant
-        poseStack.translate(-0.5, -0.5, -0.5);  // décentrer
+        poseStack.translate(0.5, 0.5, 0.5);
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(handleAngle));
+        poseStack.translate(-0.5, -0.5, -0.5);
 
         CachedBufferer.partial(ModPartials.JUICE_PRESS_HANDLE, blockEntity.getBlockState())
             .light(combinedLight)
             .renderInto(poseStack, bufferSource.getBuffer(RenderType.solid()));
         poseStack.popPose();
 
-        // 3) Shaftless cogwheel qui tourne à la même vitesse que l'alimentation kinétique
-        float cogwheelAngle = hasKineticPower ? blockEntity.getCogwheelAngleDeg(partialTicks) : 0;
+        // 3) Shaftless cogwheel synchronisée avec la vitesse kinétique réelle
+        float cogwheelAngle = hasKineticPower ?
+            (blockEntity.getLevel().getGameTime() + partialTicks) * blockEntity.getSpeed() * 0.75f : 0;
+
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));
