@@ -1,6 +1,6 @@
 package be.pierrelac.create_vinery.client.renderer;
 
-import be.pierrelac.create_vinery.blockentity.MechanicalJuicePressBlockEntity;
+import be.pierrelac.create_vinery.content.machines.MechanicalJuicePressBlockEntity;
 import be.pierrelac.create_vinery.client.ModPartials;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
@@ -30,9 +30,6 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
 
         Direction facing = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
 
-        // Debug log pour vérifier que le renderer est appelé
-        // CreateVinery.LOGGER.info("Rendering mechanical juice press at {}", blockEntity.getBlockPos());
-
         // Vérifier s'il y a de la force kinétique
         boolean hasKineticPower = Math.abs(blockEntity.getSpeed()) > 0;
 
@@ -52,18 +49,19 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
         // 2) Volant/poignée qui tourne (seulement si alimentée)
         float handleAngle = hasKineticPower ? blockEntity.getHandleAngleDeg(partialTicks) : 0;
         poseStack.pushPose();
-        poseStack.translate(0.5, 0.5, 0.5);  // centrer
-        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));  // orientation du bloc
-        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(handleAngle));  // rotation du volant
-        poseStack.translate(-0.5, -0.5, -0.5);  // décentrer
+        poseStack.translate(0.5, 0.5, 0.5);
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(handleAngle));
+        poseStack.translate(-0.5, -0.5, -0.5);
 
         CachedBufferer.partial(ModPartials.JUICE_PRESS_HANDLE, blockEntity.getBlockState())
             .light(combinedLight)
             .renderInto(poseStack, bufferSource.getBuffer(RenderType.solid()));
         poseStack.popPose();
 
-        // 3) Shaftless cogwheel qui tourne à la même vitesse que l'alimentation kinétique
-        float cogwheelAngle = hasKineticPower ? blockEntity.getCogwheelAngleDeg(partialTicks) : 0;
+        // 3) Shaftless cogwheel qui tourne dès qu'il y a de la puissance kinétique
+        // La méthode getCogwheelAngleDeg() gère déjà la logique de vitesse en interne
+        float cogwheelAngle = blockEntity.getCogwheelAngleDeg(partialTicks);
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing)));
