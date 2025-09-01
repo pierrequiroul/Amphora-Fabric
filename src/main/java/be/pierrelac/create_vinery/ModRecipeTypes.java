@@ -1,6 +1,7 @@
 package be.pierrelac.create_vinery;
 
 import be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressRecipe;
+import be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressRecipeSerializer;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeFactory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -19,13 +20,23 @@ import java.util.function.Supplier;
  */
 public enum ModRecipeTypes implements IRecipeTypeInfo {
 
-    JUICE_PRESSING(JuicePressRecipe::new);
+    JUICE_PRESSING(() -> new JuicePressRecipeSerializer());
 
     private final ResourceLocation id;
     private final RecipeSerializer<?> serializerObject;
     private final RecipeType<?> typeObject;
     private final Supplier<RecipeType<?>> type;
 
+    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+        String name = Lang.asId(name());
+        id = new ResourceLocation(CreateVinery.ID, name);
+        serializerObject = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, id, serializerSupplier.get());
+        typeObject = simpleType(id);
+        Registry.register(BuiltInRegistries.RECIPE_TYPE, id, typeObject);
+        type = () -> typeObject;
+    }
+
+    // Constructeur alternatif pour les recettes de traitement standard
     ModRecipeTypes(ProcessingRecipeFactory<?> processingFactory) {
         String name = Lang.asId(name());
         id = new ResourceLocation(CreateVinery.ID, name);

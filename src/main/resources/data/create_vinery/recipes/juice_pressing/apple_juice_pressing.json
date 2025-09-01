@@ -1,0 +1,27 @@
+{
+  "type": "create_vinery:juice_pressing",
+  "ingredients": [
+    {
+      "item": "minecraft:apple",
+      "count": 4
+    }
+  ],
+  "results": [
+    {
+      "fluid": "create_vinery:apple_juice",
+      "amount": 350
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 1,
+      "chance": 0.8
+    },
+    {
+      "item": "minecraft:apple",
+      "count": 1,
+      "chance": 0.1
+    }
+  ],
+  "processingTime": 160
+}
+

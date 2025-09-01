@@ -1,0 +1,22 @@
+{
+  "type": "create_vinery:juice_pressing",
+  "ingredients": [
+    {
+      "item": "vinery:white_grape",
+      "count": 5
+    }
+  ],
+  "results": [
+    {
+      "fluid": "create_vinery:white_grape_juice",
+      "amount": 400
+    },
+    {
+      "item": "minecraft:wheat_seeds",
+      "count": 1,
+      "chance": 0.6
+    }
+  ],
+  "processingTime": 180
+}
+

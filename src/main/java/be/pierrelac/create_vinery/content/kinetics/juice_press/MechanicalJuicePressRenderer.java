@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
  * Renderer pour la presse à jus mécanique - Architecture alignée sur MechanicalMixerRenderer
  */
 public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<MechanicalJuicePressBlockEntity> {
-
+	private static final boolean debugRender = false;
     public MechanicalJuicePressRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
@@ -36,7 +36,7 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
                               MultiBufferSource buffer, int light, int overlay) {
 
         // Debug logging
-        System.out.println("[JuicePress Renderer] Starting render...");
+		if(debugRender) System.out.println("[JuicePress Renderer] Starting render...");
 
         // Temporairement désactiver la vérification Flywheel pour débugger
         // if (com.jozufozu.flywheel.backend.Backend.isOn()) return;
@@ -46,26 +46,26 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
 
         try {
             // 1. Rendu du SHAFTLESS_COGWHEEL principal (comme le mixer)
-            System.out.println("[JuicePress] Rendering SHAFTLESS_COGWHEEL...");
+			if(debugRender) System.out.println("[JuicePress] Rendering SHAFTLESS_COGWHEEL...");
             SuperByteBuffer cogwheelBuffer = CachedBufferer.partial(AllPartialModels.SHAFTLESS_COGWHEEL, blockState);
             standardKineticRotationTransform(cogwheelBuffer, be, light).renderInto(ms, vb);
-            System.out.println("[JuicePress] SHAFTLESS_COGWHEEL rendered successfully");
+			if(debugRender) System.out.println("[JuicePress] SHAFTLESS_COGWHEEL rendered successfully");
 
             // 2. Variables d'animation
             float screwOffset = be.getRenderedScrewOffset(partialTicks);
             float handleSpeed = be.getRenderedHandleRotationSpeed(partialTicks);
-            System.out.println("[JuicePress] Animation vars - screwOffset: " + screwOffset + ", handleSpeed: " + handleSpeed);
+			if(debugRender) System.out.println("[JuicePress] Animation vars - screwOffset: " + screwOffset + ", handleSpeed: " + handleSpeed);
 
             // 3. Rendu de la vis mobile (équivalent au MIXER_POLE)
-            System.out.println("[JuicePress] Rendering SCREW...");
+			if(debugRender) System.out.println("[JuicePress] Rendering SCREW...");
             SuperByteBuffer screwRender = CachedBufferer.partial(ModPartials.JUICE_PRESS_SCREW, blockState);
             screwRender.translate(0, -screwOffset, 0)
                     .light(light)
                     .renderInto(ms, vb);
-            System.out.println("[JuicePress] SCREW rendered successfully");
+			if(debugRender) System.out.println("[JuicePress] SCREW rendered successfully");
 
             // 4. Rendu de la poignée rotative (écrou qui tourne seulement pendant le pressage)
-            System.out.println("[JuicePress] Rendering HANDLE...");
+			if(debugRender) System.out.println("[JuicePress] Rendering HANDLE...");
 
             // Animation du handle : tourne seulement quand la vis descend (pendant une recette)
             float handleAngle = 0f;
@@ -76,7 +76,7 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
                 handleAngle = screwProgress * 360f * 2f; // 2 tours complets sur la course
             }
 
-            System.out.println("[JuicePress] Handle angle: " + handleAngle + " (running: " + be.isRunning() + ")");
+            if(debugRender) System.out.println("[JuicePress] Handle angle: " + handleAngle + " (running: " + be.isRunning() + ")");
 
             // Utiliser RenderType.solid() pour le handle
             SuperByteBuffer handleRender = CachedBufferer.partial(ModPartials.JUICE_PRESS_HANDLE, blockState);
@@ -84,7 +84,7 @@ public class MechanicalJuicePressRenderer extends KineticBlockEntityRenderer<Mec
                     // .translate(0, -screwOffset, 0) // Le handle reste en position fixe
                     .light(light)
                     .renderInto(ms, vb);
-            System.out.println("[JuicePress] HANDLE rendered successfully");
+			if(debugRender) System.out.println("[JuicePress] HANDLE rendered successfully");
 
         } catch (Exception e) {
             System.err.println("[JuicePress] Error during rendering: " + e.getMessage());
