@@ -30,16 +30,22 @@ repositories {
 
 	maven { url = "https://maven.terraformersmc.com/releases" } // Mod Menu, EMI
 
-	maven { 
-		url ="https://modmaven.dev/" 
+	maven {
+		url ="https://modmaven.dev/"
 		content {
 			includeGroup("com.simibubi.create")
 			includeGroup("com.jozufozu.flywheel")
 		}
 	}
-	maven { 
+	maven {
 		url = "https://cursemaven.com"
 		content { includeGroup "curse.maven" }
+	}
+	repositories {
+		maven {
+			name "createmod maven"
+			url "https://maven.createmod.net/"
+		}
 	}
 }
 
@@ -62,7 +68,7 @@ dependencies {
 	// dependencies
 	modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
-	// Create - dependencies are added transitively
+	// Create - dependencies are added transitively (inclut déjà Flywheel)
 	modImplementation("com.simibubi.create:create-fabric-$minecraft_version:$create_version")
 
     // Let's do Vinery

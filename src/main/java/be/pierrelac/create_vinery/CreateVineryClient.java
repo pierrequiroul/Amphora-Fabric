@@ -1,6 +1,5 @@
 package be.pierrelac.create_vinery;
 
-import be.pierrelac.create_vinery.blockentity.ModBlockEntities;
 import be.pierrelac.create_vinery.content.kinetics.juice_press.MechanicalJuicePressRenderer;
 import be.pierrelac.create_vinery.content.fluids.juice.JuiceBucketItem;
 import net.fabricmc.api.ClientModInitializer;
@@ -29,6 +28,7 @@ public class CreateVineryClient implements ClientModInitializer {
         registerFluidRendering();
         registerBucketColors();
         registerBlockEntityRenderers();
+        registerFlywheelVisuals(); // Ajouter l'enregistrement Flywheel
         registerBlockRenderLayers();
 
         CreateVinery.LOGGER.info("Create: Vinery client initialization complete");
@@ -87,6 +87,14 @@ public class CreateVineryClient implements ClientModInitializer {
     private static void registerBlockEntityRenderers() {
         BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_JUICE_PRESS, MechanicalJuicePressRenderer::new);
         CreateVinery.LOGGER.info("Registered BlockEntity renderer for mechanical juice press");
+    }
+
+    private static void registerFlywheelVisuals() {
+        // Temporairement désactivé pour débugger le rendu
+        // com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry.configure(ModBlockEntities.MECHANICAL_JUICE_PRESS)
+        //     .factory(be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressVisual::new);
+
+        CreateVinery.LOGGER.info("Flywheel visual registration DISABLED for debugging");
     }
 
     /**

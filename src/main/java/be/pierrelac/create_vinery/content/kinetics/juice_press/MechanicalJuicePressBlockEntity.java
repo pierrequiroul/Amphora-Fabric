@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,28 +16,14 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 /**
- * BlockEntity pour la presse à jus mécanique avec animation synchronisée
- * Architecture séparée: kinétique vs processus
+ * BlockEntity pour la presse à jus mécanique - Architecture simplifiée comme MechanicalMixer
  */
 public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
 
-    // ===============================
-    // Process cycle variables (separate from kinetics)
-    // ===============================
-    private boolean running = false;           // true only during an active cycle
-    private int cycleTicks = 0;               // 0..BASE_CYCLE
-
-    // Constants for process cycle
-    private static final int BASE_CYCLE = 40;
-    public static final int PRESS_PHASE_START = 15;
-    public static final int PRESS_PHASE_END = 25;
-
-    // Constants for screw mechanics
-    private static final float STROKE = 6f/16f;    // Maximum screw travel in blocks
-    private static final float PITCH = 2f/16f;     // Thread pitch for handle rotation
-
-    // Legacy field for compatibility
-    private int processingTicks = -1;
+    // Variables d'animation simplifiées comme le Mixer
+    public int runningTicks;
+    public int processingTicks;
+    public boolean running;
 
     public MechanicalJuicePressBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -47,122 +34,40 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
         super.addBehaviours(behaviours);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (level == null || level.isClientSide) return;
-
-        // Check if we can run a process cycle
-        boolean speedOk = super.isSpeedRequirementFulfilled();
-        boolean canProcess = speedOk && canProcessInBasin();
-
-        if (!canProcess) {
-            // Stop the cycle if conditions aren't met
-            running = false;
-            cycleTicks = 0;
-            setChanged();
-            sendData();
-            return;
+    // Animation similaire au Mixer mais adaptée pour un pressage vertical
+    public float getRenderedScrewOffset(float partialTicks) {
+        int localTick;
+        float offset = 0;
+        if (running) {
+            if (runningTicks < 20) {
+                localTick = runningTicks;
+                float num = (localTick + partialTicks) / 20f;
+                num = ((2 - Mth.cos((float) (num * Math.PI))) / 2);
+                offset = num - .5f;
+            } else if (runningTicks <= 20) {
+                offset = 1; // Position basse maintenue
+            } else {
+                localTick = 40 - runningTicks;
+                float num = (localTick - partialTicks) / 20f;
+                num = ((2 - Mth.cos((float) (num * Math.PI))) / 2);
+                offset = num - .5f;
+            }
         }
+        return offset + 7 / 16f; // Ajustement de position comme le Mixer
+    }
 
-        // Start or continue the pressing cycle
-        if (!running) {
-            running = true;
-            cycleTicks = 0;
+    public float getRenderedHandleRotationSpeed(float partialTicks) {
+        float speed = getSpeed();
+        if (running) {
+            if (runningTicks < 15) {
+                return speed;
+            }
+            if (runningTicks <= 20) {
+                return speed * 2; // Vitesse double pendant le pressage
+            }
+            return speed;
         }
-
-        // Advance cycle based on speed (faster RPM = faster cycle)
-        float speed = Math.abs(getSpeed());
-        int cycleIncrement = 1;
-        if (speed > 20) {
-            cycleIncrement = 2; // Faster at high speeds
-        }
-
-        cycleTicks += cycleIncrement;
-
-        // Play sound during pressing phase
-        if (cycleTicks == PRESS_PHASE_START) {
-            level.playSound(null, worldPosition, SoundEvents.HONEY_BLOCK_PLACE,
-                SoundSource.BLOCKS, 0.35f, 1f);
-        }
-
-        // Complete the cycle
-        if (cycleTicks >= BASE_CYCLE) {
-            runOneCycle();
-            running = false;
-            cycleTicks = 0;
-        }
-
-        setChanged();
-        sendData();
-    }
-
-    // ===============================
-    // Process cycle methods
-    // ===============================
-
-    /**
-     * Check if basin has valid recipe ingredients
-     */
-    private boolean canProcessInBasin() {
-        // TODO: Implement proper recipe checking with basin contents
-        // For now, always return true if basin exists
-        return getBasin().isPresent();
-    }
-
-    /**
-     * Execute one complete pressing cycle
-     */
-    private void runOneCycle() {
-        // TODO: Implement recipe processing logic
-        // - Consume ingredients from basin
-        // - Produce juice fluid in basin
-    }
-
-    // ===============================
-    // Animation API methods
-    // ===============================
-
-    /**
-     * Returns true only when actively running a press cycle
-     */
-    public boolean isRunning() {
-        return running;
-    }
-
-    /**
-     * Get current cycle phase (0.0 to 1.0)
-     */
-    public float getCyclePhase(float pt) {
-        return running ? ((cycleTicks + pt) / (float) BASE_CYCLE) : 0f;
-    }
-
-    /**
-     * Map phase to down/pause/up profile (same as mixer's profile)
-     * Return 0..1 travel fraction (0 = top, 1 = bottom)
-     */
-    public float getScrewProgress(float pt) {
-        if (!running) return 0f;
-        float p = getCyclePhase(pt);
-        if (p <= 0.5f) return p * 2f;        // 0..0.5 = going down
-        return (1f - p) * 2f;                 // 0.5..1 = going up
-    }
-
-    /**
-     * Actual Y offset for the screw partial
-     */
-    public float getScrewYOffset(float pt) {
-        return -getScrewProgress(pt) * STROKE;
-    }
-
-    /**
-     * Handle angle derived strictly from screw travel (freeze when !running)
-     */
-    public float getHandleAngleDeg(float pt) {
-        if (!running) return 0f;
-        float screwTravel = getScrewProgress(pt) * STROKE;
-        return (screwTravel / PITCH) * 360f;
+        return speed / 2;
     }
 
     @Override
@@ -174,7 +79,7 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.putBoolean("Running", running);
-        compound.putInt("CycleTicks", cycleTicks);
+        compound.putInt("RunningTicks", runningTicks);
         compound.putInt("ProcessingTicks", processingTicks);
     }
 
@@ -182,31 +87,89 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         running = compound.getBoolean("Running");
-        cycleTicks = compound.getInt("CycleTicks");
+        runningTicks = compound.getInt("RunningTicks");
         processingTicks = compound.getInt("ProcessingTicks");
     }
-
-    // ===============================
-    // BasinOperatingBlockEntity required methods
-    // ===============================
 
     @Override
     protected void onBasinRemoved() {
         running = false;
-        cycleTicks = 0;
+        runningTicks = 0;
         processingTicks = -1;
         setChanged();
         sendData();
     }
 
-    @Override
-    protected Object getRecipeCacheKey() {
-        return "juice_pressing_recipes";
+	@Override
+	protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
+		return false;
+	}
+
+	@Override
+	protected Object getRecipeCacheKey() {
+		return null;
+	}
+
+	@Override
+    public void tick() {
+        super.tick();
+
+        if (level == null || level.isClientSide)
+            return;
+
+        if (runningTicks >= 40) {
+            running = false;
+            runningTicks = 0;
+            // Finaliser le processus ici - appeler la logique de recette
+            applyRecipeOutputs();
+            return;
+        }
+
+        if (running) {
+            runningTicks++;
+
+            // Son pendant le pressage
+            if (runningTicks == 15) {
+                level.playSound(null, worldPosition, SoundEvents.HONEY_BLOCK_PLACE,
+                    SoundSource.BLOCKS, 0.35f, 1f);
+            }
+
+            setChanged();
+            sendData();
+            return;
+        }
+
+        // Vérifier si on peut démarrer un processus SEULEMENT s'il y a une recette valide
+        if (canProcessInBasin()) {
+            running = true;
+            runningTicks = 0;
+            setChanged();
+            sendData();
+        }
     }
 
-    @Override
-    protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        // TODO: Filter only juice pressing recipes
-        return true;
+    private boolean canProcessInBasin() {
+        if (!getBasin().isPresent() || !isSpeedRequirementFulfilled()) {
+            return false;
+        }
+
+        // Vérifier qu'il y a une recette valide dans le bassin
+        return hasValidRecipe();
     }
+
+    private boolean hasValidRecipe() {
+        // TODO: Implémenter la vérification de recette réelle
+        // Pour l'instant, retourner false pour éviter le démarrage automatique
+        return false;
+    }
+
+    private void applyRecipeOutputs() {
+        // TODO: Implémenter l'application des résultats de recette
+        // Consommer les ingrédients et produire les résultats
+    }
+
+	@Override
+	public boolean isRunning() {
+		return running;
+	}
 }

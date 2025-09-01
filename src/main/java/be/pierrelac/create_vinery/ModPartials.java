@@ -22,5 +22,9 @@ public class ModPartials {
      */
     public static void init() {
         // Force le chargement de la classe et l'initialisation des constantes
+        System.out.println("[Create Vinery] Loading partial models...");
+        System.out.println("- JUICE_PRESS_SCREW: " + JUICE_PRESS_SCREW);
+        System.out.println("- JUICE_PRESS_HANDLE: " + JUICE_PRESS_HANDLE);
+        System.out.println("- JUICE_PRESS_SHAFT: " + JUICE_PRESS_SHAFT);
     }
 }

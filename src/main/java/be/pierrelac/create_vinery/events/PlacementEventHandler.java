@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
  * Gestionnaire d'événements pour le placement intelligent du pressoir à jus
@@ -43,7 +44,7 @@ public class PlacementEventHandler {
             // Vérifier si la position est libre
             if (world.getBlockState(targetPos).canBeReplaced()) {
                 BlockState newState = ModBlocks.MECHANICAL_JUICE_PRESS.defaultBlockState()
-                    .setValue(MechanicalJuicePressBlock.FACING, player.getDirection().getOpposite());
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, player.getDirection().getOpposite());
 
                 // Vérifier si le bloc peut survivre à cette position
                 if (newState.canSurvive(world, targetPos)) {

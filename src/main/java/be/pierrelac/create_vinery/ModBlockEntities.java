@@ -22,7 +22,7 @@ public class ModBlockEntities {
 
         MECHANICAL_JUICE_PRESS = FabricBlockEntityTypeBuilder.<MechanicalJuicePressBlockEntity>create(
             (pos, state) -> new MechanicalJuicePressBlockEntity(MECHANICAL_JUICE_PRESS, pos, state))
-            .addBlocks(/* Le bloc sera ajouté quand on l'aura créé */)
+            .addBlocks(ModBlocks.MECHANICAL_JUICE_PRESS)
             .build();
 
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,
