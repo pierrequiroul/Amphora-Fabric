@@ -1,9 +1,7 @@
-package be.pierrelac.create_vinery.blocks;
+package be.pierrelac.create_vinery.content.kinetics.juice_press;
 
-import be.pierrelac.create_vinery.blockentity.MechanicalJuicePressBlockEntity;
 import be.pierrelac.create_vinery.blockentity.ModBlockEntities;
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.content.processing.basin.BasinBlock;

@@ -1,4 +1,4 @@
-package be.pierrelac.create_vinery.items;
+package be.pierrelac.create_vinery.content.fluids.juice;
 
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.material.Fluid;
@@ -8,12 +8,12 @@ import net.minecraft.world.level.material.Fluid;
  */
 public class JuiceBucketItem extends BucketItem {
     private final int color;
-    
+
     public JuiceBucketItem(Fluid fluid, int color, Properties properties) {
         super(fluid, properties);
         this.color = color;
     }
-    
+
     public int getColor() {
         return color;
     }
