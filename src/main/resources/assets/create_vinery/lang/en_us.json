@@ -1,6 +1,13 @@
 {
   "itemGroup.create_vinery.main": "Create: Vinery",
   
+  "_comment_blocks_machines": "Machine blocks",
+  "block.create_vinery.mechanical_juice_press": "Mechanical Juice Press",
+  
+  "_comment_emi": "EMI recipe categories",
+  "emi.category.create_vinery.juice_pressing": "Juice Pressing",
+  "emi.category.create_vinery.juice_pressing.info": "Press fruits to extract juices using a Mechanical Juice Press above a Basin. Requires rotational power.",
+  
   "_comment_fluids": "Fluid display names (for JEI/EMI compatibility)",
   "fluid.create_vinery.red_grape_juice": "Red Grape Juice",
   "fluid.create_vinery.white_grape_juice": "White Grape Juice",

@@ -2,7 +2,7 @@
   "type": "create_vinery:juice_pressing",
   "ingredients": [
     {
-      "item": "vinery:red_taiga_grape"
+      "item": "vinery:taiga_grapes_red"
     }
   ],
   "results": [

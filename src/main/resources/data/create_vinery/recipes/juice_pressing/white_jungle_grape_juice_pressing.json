@@ -2,7 +2,7 @@
   "type": "create_vinery:juice_pressing",
   "ingredients": [
     {
-      "item": "vinery:white_jungle_grape"
+      "item": "vinery:jungle_grapes_white"
     }
   ],
   "results": [

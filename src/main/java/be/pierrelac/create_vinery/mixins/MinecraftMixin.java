@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void create_vinery$init(GameConfig gameConfig, CallbackInfo ci) {
+        System.out.println("[CREATE_VINERY-MIXIN] Mixin was called successfully!");
         CreateVinery.LOGGER.info("Initializing Create: Vinery integration");
     }
 }

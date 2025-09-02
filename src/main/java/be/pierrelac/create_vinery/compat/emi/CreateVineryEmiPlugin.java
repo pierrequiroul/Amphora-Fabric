@@ -1,0 +1,116 @@
+package be.pierrelac.create_vinery.compat.emi;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import be.pierrelac.create_vinery.CreateVinery;
+import be.pierrelac.create_vinery.ModBlocks;
+import be.pierrelac.create_vinery.ModRecipeTypes;
+import be.pierrelac.create_vinery.compat.emi.recipes.JuicePressEmiRecipe;
+import be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressRecipe;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.compat.emi.DoubleItemIcon;
+
+import dev.emi.emi.api.EmiPlugin;
+import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.render.EmiRenderable;
+import dev.emi.emi.api.stack.EmiStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
+
+/**
+ * Plugin EMI pour Create: Vinery
+ * Gère l'intégration avec EMI pour les recettes de pressage de jus
+ */
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class CreateVineryEmiPlugin implements EmiPlugin {
+    
+    static {
+        CreateVinery.LOGGER.error("[EMI-PLUGIN] Static block - CreateVineryEmiPlugin class loaded!");
+    }
+    
+    public CreateVineryEmiPlugin() {
+        CreateVinery.LOGGER.error("[EMI-PLUGIN] CreateVineryEmiPlugin constructor called!");
+    }
+    // Stockage de toutes les catégories EMI
+    public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
+
+    // Catégorie pour le pressage de jus
+    public static final EmiRecipeCategory JUICE_PRESSING = register("juice_pressing", 
+        DoubleItemIcon.of(ModBlocks.MECHANICAL_JUICE_PRESS, AllBlocks.BASIN.get()));
+
+    @Override
+    public void register(EmiRegistry registry) {
+        CreateVinery.LOGGER.error("=== CREATE VINERY EMI PLUGIN: Starting registration ===");
+        
+        // Enregistrer toutes les catégories
+        ALL.forEach((id, category) -> {
+            registry.addCategory(category);
+            CreateVinery.LOGGER.error("✓ Registered EMI category: {}", id);
+        });
+
+        // Ajouter les stations de travail pour le juice press
+        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(ModBlocks.MECHANICAL_JUICE_PRESS));
+        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(AllBlocks.BASIN.get()));
+
+        // Ajouter les recettes de pressage de jus
+        addAllJuicePress(registry, ModRecipeTypes.JUICE_PRESSING.getType(), JUICE_PRESSING);
+
+        CreateVinery.LOGGER.error("=== CREATE VINERY EMI PLUGIN: Registration completed ===");
+    }
+
+    /**
+     * Helper method spécifique pour ajouter les recettes de juice press
+     */
+    private void addAllJuicePress(EmiRegistry registry, RecipeType<?> type, EmiRecipeCategory category) {
+        CreateVinery.LOGGER.error("=== EMI RECIPE DIAGNOSTIC START ===");
+        CreateVinery.LOGGER.error("Searching for recipes of type: {}", type);
+        
+        var recipeManager = registry.getRecipeManager();
+        
+        @SuppressWarnings("unchecked")
+        var juicePressType = (RecipeType<JuicePressRecipe>) type;
+        List<JuicePressRecipe> juicePressRecipes = recipeManager.getAllRecipesFor(juicePressType);
+        CreateVinery.LOGGER.error("Found {} juice press recipes for type {}", juicePressRecipes.size(), type);
+        
+        if (juicePressRecipes.isEmpty()) {
+            CreateVinery.LOGGER.error("⚠️ NO JUICE PRESS RECIPES FOUND!");
+        }
+        
+        for (JuicePressRecipe recipe : juicePressRecipes) {
+            try {
+                CreateVinery.LOGGER.error("Processing recipe: {}", recipe.getId());
+                
+                var emiRecipe = new JuicePressEmiRecipe(category, recipe);
+                registry.addRecipe(emiRecipe);
+                CreateVinery.LOGGER.error("✓ Successfully added EMI recipe: {}", recipe.getId());
+            } catch (Exception e) {
+                CreateVinery.LOGGER.error("✗ Failed to add juice press recipe: {}", recipe.getId(), e);
+            }
+        }
+        
+        CreateVinery.LOGGER.error("✓ Added {} juice press EMI recipes", juicePressRecipes.size());
+        CreateVinery.LOGGER.error("=== EMI RECIPE DIAGNOSTIC END ===");
+    }
+
+    /**
+     * Enregistre une nouvelle catégorie EMI
+     */
+    private static EmiRecipeCategory register(String name, EmiRenderable icon) {
+        ResourceLocation id = new ResourceLocation(CreateVinery.ID, name);
+        EmiRecipeCategory category = new EmiRecipeCategory(id, icon);
+        ALL.put(id, category);
+        return category;
+    }
+
+    /**
+     * Génère un ResourceLocation synthétique pour des recettes générées
+     */
+    public static ResourceLocation synthetic(String path) {
+        return new ResourceLocation(CreateVinery.ID, "emi/" + path);
+    }
+}

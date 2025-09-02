@@ -19,6 +19,9 @@
     ],
     "client": [
       "be.pierrelac.create_vinery.CreateVineryClient"
+    ],
+    "emi": [
+      "be.pierrelac.create_vinery.compat.emi.CreateVineryEmiPlugin"
     ]
   },
   "mixins": [
@@ -29,5 +32,8 @@
     "fabric-api": ">=${fabric_api_version}",
     "create": "${create_version}",
     "minecraft": "${minecraft_version}"
+  },
+  "suggests": {
+    "emi": "*"
   }
 }

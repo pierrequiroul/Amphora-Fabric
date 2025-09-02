@@ -1,4 +1,11 @@
 {
+    "_comment_blocks_machines": "Blocs de machines",
+    "block.create_vinery.mechanical_juice_press": "Presse à jus mécanique",
+    
+    "_comment_emi": "Catégories de recettes EMI",
+    "emi.category.create_vinery.juice_pressing": "Pressage de jus",
+    "emi.category.create_vinery.juice_pressing.info": "Pressez les fruits pour extraire les jus en utilisant une Presse à jus mécanique au-dessus d'un Bassin. Nécessite une force rotationnelle.",
+    
     "_comment_fluids": "Noms des fluides (pour compatibilité JEI/EMI)",
     "fluid.create_vinery.red_grape_juice": "Jus de raisin rouge",
     "fluid.create_vinery.white_grape_juice": "Jus de raisin blanc",

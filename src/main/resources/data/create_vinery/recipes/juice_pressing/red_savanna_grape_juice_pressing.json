@@ -2,7 +2,7 @@
   "type": "create_vinery:juice_pressing",
   "ingredients": [
     {
-      "item": "vinery:red_savanna_grape"
+      "item": "vinery:savanna_grapes_red"
     }
   ],
   "results": [
