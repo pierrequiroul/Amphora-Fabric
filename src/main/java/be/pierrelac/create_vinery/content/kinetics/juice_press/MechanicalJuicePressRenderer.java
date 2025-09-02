@@ -1,21 +1,17 @@
 package be.pierrelac.create_vinery.content.kinetics.juice_press;
 
 import be.pierrelac.create_vinery.ModPartials;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nonnull;
 
 /**
  * Renderer pour la presse à jus mécanique - Architecture alignée sur MechanicalMixerRenderer

@@ -1,6 +1,7 @@
 {
   "sources": [
     { "type": "single", "resource": "create_vinery:fluid/juice_still" },
-    { "type": "single", "resource": "create_vinery:fluid/juice_flow" }
+    { "type": "single", "resource": "create_vinery:fluid/juice_flow" },
+    { "type": "single", "resource": "create_vinery:fluid/grapejuice_still" }
   ]
 }

@@ -37,25 +37,29 @@ public class CreateVineryClient implements ClientModInitializer {
     private void registerFluidRendering() {
         CreateVinery.LOGGER.info("Registering Fabric fluid rendering for {} juice types", ModFluids.STILL_FLUIDS.size());
 
-        // Utiliser nos textures de jus personnalisées avec le bon chemin
-        var juiceStillTexture = new ResourceLocation("create_vinery", "fluid/juice_still");
-        var juiceFlowTexture = new ResourceLocation("create_vinery", "fluid/juice_flow");
-
-        // Enregistrer les renderers pour chaque jus
+        // Enregistrer les renderers pour chaque jus avec leurs textures spécifiques
         ModFluids.STILL_FLUIDS.forEach((juiceId, stillFluid) -> {
             var flowingFluid = ModFluids.FLOWING_FLUIDS.get(juiceId);
             var color = ModFluids.JUICE_COLORS.get(juiceId);
+            var stillTexturePath = ModFluids.getStillTexture(juiceId);
+            var flowTexturePath = ModFluids.getFlowTexture(juiceId);
 
-            if (flowingFluid != null && color != null) {
-                // Créer un renderer avec nos textures de jus et coloration spécifique
+            if (flowingFluid != null && color != null && stillTexturePath != null && flowTexturePath != null) {
+                // Créer les ResourceLocations pour les textures spécifiques à ce fluide
+                var juiceStillTexture = new ResourceLocation("create_vinery", stillTexturePath);
+                var juiceFlowTexture = new ResourceLocation("create_vinery", flowTexturePath);
+                
+                // Créer un renderer avec les textures spécifiques et coloration
                 var handler = new SimpleFluidRenderHandler(juiceStillTexture, juiceFlowTexture, color);
 
                 FluidRenderHandlerRegistry.INSTANCE.register(stillFluid, handler);
                 FluidRenderHandlerRegistry.INSTANCE.register(flowingFluid, handler);
 
-                CreateVinery.LOGGER.info("✓ Registered juice rendering for {} with color 0x{}", juiceId, Integer.toHexString(color));
+                CreateVinery.LOGGER.info("✓ Registered juice rendering for {} with textures [still: {}, flow: {}] and color 0x{}", 
+                    juiceId, stillTexturePath, flowTexturePath, Integer.toHexString(color));
             } else {
-                CreateVinery.LOGGER.warn("✗ Missing data for fluid {}: flowing={}, color={}", juiceId, flowingFluid, color);
+                CreateVinery.LOGGER.warn("✗ Missing data for fluid {}: flowing={}, color={}, stillTexture={}, flowTexture={}", 
+                    juiceId, flowingFluid, color, stillTexturePath, flowTexturePath);
             }
         });
 

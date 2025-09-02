@@ -1,6 +1,5 @@
 package be.pierrelac.create_vinery;
 
-import be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressRecipe;
 import be.pierrelac.create_vinery.content.kinetics.juice_press.JuicePressRecipeSerializer;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeFactory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;

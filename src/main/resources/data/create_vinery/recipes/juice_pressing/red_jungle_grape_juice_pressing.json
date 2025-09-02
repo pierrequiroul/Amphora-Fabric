@@ -2,12 +2,12 @@
   "type": "create_vinery:juice_pressing",
   "ingredients": [
     {
-      "item": "minecraft:apple"
+      "item": "vinery:red_jungle_grape"
     }
   ],
   "results": [
     {
-      "fluid": "create_vinery:apple_juice", 
+      "fluid": "create_vinery:red_jungle_grape_juice", 
       "amount": 85
     },
     {

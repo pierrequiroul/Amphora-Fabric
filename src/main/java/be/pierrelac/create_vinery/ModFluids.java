@@ -45,12 +45,16 @@ public class ModFluids {
         public final int color;
         public final String fluidTranslationKey;
         public final String bucketTranslationKey;
+        public final String stillTexture;
+        public final String flowTexture;
         
-        public FluidInfo(String id, int color, String fluidTranslationKey, String bucketTranslationKey) {
+        public FluidInfo(String id, int color, String fluidTranslationKey, String bucketTranslationKey, String stillTexture, String flowTexture) {
             this.id = id;
             this.color = color;
             this.fluidTranslationKey = fluidTranslationKey;
             this.bucketTranslationKey = bucketTranslationKey;
+            this.stillTexture = stillTexture;
+            this.flowTexture = flowTexture;
         }
     }
     
@@ -60,52 +64,72 @@ public class ModFluids {
         FLUID_DEFINITIONS.put("red_grape", new FluidInfo(
             "red_grape", 0x6e386c, 
             "block.create_vinery.red_grape_juice", 
-            "item.create_vinery.red_grape_juice_bucket"
+            "item.create_vinery.red_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("white_grape", new FluidInfo(
             "white_grape", 0x80c04c,
             "block.create_vinery.white_grape_juice",
-            "item.create_vinery.white_grape_juice_bucket"
+            "item.create_vinery.white_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("red_savanna_grape", new FluidInfo(
             "red_savanna_grape", 0xa23661,
             "block.create_vinery.red_savanna_grape_juice",
-            "item.create_vinery.red_savanna_grape_juice_bucket"
+            "item.create_vinery.red_savanna_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("white_savanna_grape", new FluidInfo(
             "white_savanna_grape", 0xbbbd44,
             "block.create_vinery.white_savanna_grape_juice",
-            "item.create_vinery.white_savanna_grape_juice_bucket"
+            "item.create_vinery.white_savanna_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("red_taiga_grape", new FluidInfo(
             "red_taiga_grape", 0x6633a4,
             "block.create_vinery.red_taiga_grape_juice",
-            "item.create_vinery.red_taiga_grape_juice_bucket"
+            "item.create_vinery.red_taiga_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("white_taiga_grape", new FluidInfo(
             "white_taiga_grape", 0x77b476,
             "block.create_vinery.white_taiga_grape_juice",
-            "item.create_vinery.white_taiga_grape_juice_bucket"
+            "item.create_vinery.white_taiga_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("red_jungle_grape", new FluidInfo(
             "red_jungle_grape", 0x943682,
             "block.create_vinery.red_jungle_grape_juice",
-            "item.create_vinery.red_jungle_grape_juice_bucket"
+            "item.create_vinery.red_jungle_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("white_jungle_grape", new FluidInfo(
             "white_jungle_grape", 0xabbb5c,
             "block.create_vinery.white_jungle_grape_juice",
-            "item.create_vinery.white_jungle_grape_juice_bucket"
+            "item.create_vinery.white_jungle_grape_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("apple", new FluidInfo(
             "apple", 0xe8be72,
             "block.create_vinery.apple_juice",
-            "item.create_vinery.apple_juice_bucket"
+            "item.create_vinery.apple_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         FLUID_DEFINITIONS.put("cherry", new FluidInfo(
             "cherry", 0xc44b55,
             "block.create_vinery.cherry_juice",
-            "item.create_vinery.cherry_juice_bucket"
+            "item.create_vinery.cherry_juice_bucket",
+            "fluid/grapejuice_still",
+            "fluid/juice_flow"
         ));
         
         // Remplir la map des couleurs pour compatibilité
@@ -192,6 +216,16 @@ public class ModFluids {
     public static String getBucketTranslationKey(String juiceId) {
         FluidInfo info = FLUID_DEFINITIONS.get(juiceId);
         return info != null ? info.bucketTranslationKey : null;
+    }
+    
+    public static String getStillTexture(String juiceId) {
+        FluidInfo info = FLUID_DEFINITIONS.get(juiceId);
+        return info != null ? info.stillTexture : null;
+    }
+    
+    public static String getFlowTexture(String juiceId) {
+        FluidInfo info = FLUID_DEFINITIONS.get(juiceId);
+        return info != null ? info.flowTexture : null;
     }
     
     public static Fluid getStillFluid(String juiceId) {

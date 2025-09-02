@@ -2,19 +2,19 @@
   "type": "create_vinery:juice_pressing",
   "ingredients": [
     {
-      "item": "minecraft:apple"
+      "item": "vinery:cherry"
     }
   ],
   "results": [
     {
-      "fluid": "create_vinery:apple_juice", 
-      "amount": 85
+      "fluid": "create_vinery:cherry_juice", 
+      "amount": 65
     },
     {
       "item": "minecraft:wheat_seeds",
       "count": 1,
-      "chance": 0.1
+      "chance": 0.08
     }
   ],
-  "processingTime": 30
+  "processingTime": 25
 }

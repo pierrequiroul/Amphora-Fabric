@@ -1,31 +1,19 @@
 package be.pierrelac.create_vinery.content.kinetics.juice_press;
 
+import be.pierrelac.create_vinery.CreateVinery;
+import be.pierrelac.create_vinery.ModRecipeTypes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.VecHelper;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +22,6 @@ import java.util.Optional;
  * Inspiré du MechanicalMixer de Create
  */
 public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
-
-    private static final Object juicePressRecipesKey = new Object();
 
     public int runningTicks;
     public int processingTicks;
@@ -131,9 +117,7 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
 
                     processingTicks = Mth.clamp((Mth.log2((int) (512 / speed))) * Mth.ceil(recipeSpeed * 15) + 1, 1, 512);
 
-                    // Son pendant le pressage
-                    level.playSound(null, worldPosition, SoundEvents.HONEY_BLOCK_PLACE,
-                        SoundSource.BLOCKS, 0.35f, speed < 65 ? .75f : 1.5f);
+                    // TODO: Ajouter un son pendant le pressage (problème de null safety à résoudre)
 
                 } else {
                     processingTicks--;
@@ -153,38 +137,51 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
 
     @Override
     protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return recipe instanceof JuicePressRecipe;
+        boolean isJuicePress = recipe instanceof JuicePressRecipe;
+        CreateVinery.LOGGER.info("Matching static filters - Recipe: {} (type: {}), isJuicePress: {}", 
+            recipe.getId(), recipe.getType(), isJuicePress);
+        return isJuicePress;
+    }
+
+    @Override
+    protected <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
+        if (recipe == null || !(recipe instanceof JuicePressRecipe)) {
+            CreateVinery.LOGGER.info("Basin match failed - Recipe: {} is not JuicePressRecipe", 
+                recipe != null ? recipe.getId() : "null");
+            return false;
+        }
+        
+        Optional<BasinBlockEntity> basin = getBasin();
+        if (!basin.isPresent()) {
+            CreateVinery.LOGGER.info("Basin match failed - No basin found");
+            return false;
+        }
+
+        // Utiliser le système standard de Create pour le matching
+        boolean matchResult = super.matchBasinRecipe(recipe);
+        CreateVinery.LOGGER.info("Basin recipe match for {} - Result: {}", 
+            recipe.getId(), matchResult);
+            
+        return matchResult;
     }
 
     @Override
     protected Object getRecipeCacheKey() {
-        return juicePressRecipesKey;
+        Object key = ModRecipeTypes.JUICE_PRESSING;
+        CreateVinery.LOGGER.info("Recipe cache key requested: {} (recipe type: {})", 
+            key, ModRecipeTypes.JUICE_PRESSING.getType());
+        return key;
     }
 
     @Override
     protected List<Recipe<?>> getMatchingRecipes() {
-        List<Recipe<?>> matchingRecipes = super.getMatchingRecipes();
-
-        Optional<BasinBlockEntity> basin = getBasin();
-        if (!basin.isPresent())
-            return matchingRecipes;
-
-        BasinBlockEntity basinBlockEntity = basin.get();
-        Storage<ItemVariant> availableItems = basinBlockEntity.getItemStorage(null);
-        if (availableItems == null)
-            return matchingRecipes;
-
-        System.out.println("[JuicePress Debug] Checking for juice press recipes...");
-        System.out.println("[JuicePress Debug] Items in basin:");
-
-        try (Transaction t = TransferUtil.getTransaction()) {
-            for (StorageView<ItemVariant> view : availableItems.nonEmptyViews()) {
-                ItemStack stack = view.getResource().toStack((int) view.getAmount());
-                System.out.println("  - " + stack.getItem() + " x" + stack.getCount());
-            }
+        // Utiliser le système standard de Create qui gère déjà tout correctement
+        List<Recipe<?>> recipes = super.getMatchingRecipes();
+        CreateVinery.LOGGER.info("Found {} matching recipes for juice pressing", recipes.size());
+        for (Recipe<?> recipe : recipes) {
+            CreateVinery.LOGGER.info("  - Recipe: {} (type: {})", recipe.getId(), recipe.getType());
         }
-
-        return matchingRecipes;
+        return recipes;
     }
 
     @Override
@@ -198,5 +195,16 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
     @Override
     public boolean isRunning() {
         return running;
+    }
+
+    @Override
+    public void startProcessingBasin() {
+        CreateVinery.LOGGER.info("Starting juice pressing basin process!");
+        if (running && runningTicks <= 20)
+            return;
+        super.startProcessingBasin();
+        running = true;
+        runningTicks = 0;
+        processingTicks = -1;
     }
 }
