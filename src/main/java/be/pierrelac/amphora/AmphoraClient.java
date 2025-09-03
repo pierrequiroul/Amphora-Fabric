@@ -106,7 +106,7 @@ public class AmphoraClient implements ClientModInitializer {
      */
     private static void registerBlockRenderLayers() {
         // Activer la transparence alpha pour le châssis de la presse à jus mécanique
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MECHANICAL_JUICE_PRESS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlockAccess.getMechanicalJuicePress(), RenderType.cutout());
 
         Amphora.LOGGER.info("Registered block render layers for transparency support");
     }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import be.pierrelac.amphora.Amphora;
 import be.pierrelac.amphora.ModBlocks;
+import be.pierrelac.amphora.ModBlockAccess;
 import be.pierrelac.amphora.ModRecipeTypes;
 import be.pierrelac.amphora.compat.emi.recipes.JuicePressEmiRecipe;
 import be.pierrelac.amphora.content.kinetics.juice_press.JuicePressRecipe;
@@ -34,7 +35,7 @@ public class AmphoraEmiPlugin implements EmiPlugin {
 
     // Catégorie pour le pressage de jus
     public static final EmiRecipeCategory JUICE_PRESSING = register("juice_pressing", 
-        DoubleItemIcon.of(ModBlocks.MECHANICAL_JUICE_PRESS, AllBlocks.BASIN.get()));
+        DoubleItemIcon.of(ModBlockAccess.getMechanicalJuicePress(), AllBlocks.BASIN.get()));
 
     @Override
     public void register(EmiRegistry registry) {
@@ -47,7 +48,7 @@ public class AmphoraEmiPlugin implements EmiPlugin {
         });
 
         // Ajouter les stations de travail pour le juice press
-        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(ModBlocks.MECHANICAL_JUICE_PRESS));
+        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(ModBlockAccess.getMechanicalJuicePress()));
         registry.addWorkstation(JUICE_PRESSING, EmiStack.of(AllBlocks.BASIN.get()));
 
         // Ajouter les recettes de pressage de jus

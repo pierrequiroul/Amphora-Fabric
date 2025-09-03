@@ -1,6 +1,5 @@
 package be.pierrelac.amphora;
 
-import be.pierrelac.amphora.content.kinetics.juice_press.MechanicalJuicePressBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,19 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Gestion de tous les blocs du mod Create: Vinery
+ * Gestion de tous les blocs du mod Create: Vinery (LEGACY SYSTEM)
+ * NOTE: Mechanical blocks are now managed by CreateRegistrationModule
  */
 public class ModBlocks {
 
     // Registre pour tous les blocs de fluide
     public static final Map<String, Block> FLUID_BLOCKS = new HashMap<>();
-
-    // Blocs mécaniques
-    public static final Block MECHANICAL_JUICE_PRESS = Registry.register(
-        BuiltInRegistries.BLOCK,
-        new ResourceLocation(Amphora.ID, "mechanical_juice_press"),
-        new MechanicalJuicePressBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque())
-    );
 
     /**
      * Méthode d'enregistrement pour s'assurer que tous les blocs sont initialisés

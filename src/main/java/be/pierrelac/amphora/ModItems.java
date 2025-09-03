@@ -1,6 +1,7 @@
 package be.pierrelac.amphora;
 
 import be.pierrelac.amphora.content.fluids.juice.JuiceBucketItem;
+import be.pierrelac.amphora.core.registration.modules.CreateRegistrationModule;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -20,12 +21,17 @@ public class ModItems {
     // Registre pour tous les seaux de jus
     public static final Map<String, Item> FLUID_BUCKETS = new HashMap<>();
 
-    // Items de bloc
-    public static final Item MECHANICAL_JUICE_PRESS_ITEM = Registry.register(
-        BuiltInRegistries.ITEM,
-        new ResourceLocation(Amphora.ID, "mechanical_juice_press"),
-        new BlockItem(ModBlocks.MECHANICAL_JUICE_PRESS, new Item.Properties())
-    );
+    // Items de bloc - DÉSACTIVÉ - Maintenant géré par CreateRegistrationModule
+    // public static final Item MECHANICAL_JUICE_PRESS_ITEM = Registry.register(
+    //     BuiltInRegistries.ITEM,
+    //     new ResourceLocation(Amphora.ID, "mechanical_juice_press"),
+    //     new BlockItem(ModBlocks.getMechanicalJuicePress(), new Item.Properties())
+    // );
+    
+    // Accès à l'item via le module Create  
+    public static Item getMechanicalJuicePressItem() {
+        return CreateRegistrationModule.getMechanicalJuicePressItem();
+    }
 
     // Items de bouteilles
     public static final Item CHERRY_JUICE_BOTTLE = Registry.register(

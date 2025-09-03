@@ -28,7 +28,7 @@ public class ModCreativeTab {
             .icon(() -> new ItemStack(Items.BUCKET)) // Icône temporaire
             .displayItems((parameters, output) -> {
                 // Ajouter le pressoir mécanique
-                output.accept(new ItemStack(ModItems.MECHANICAL_JUICE_PRESS_ITEM));
+                output.accept(new ItemStack(ModBlockAccess.getMechanicalJuicePressItem()));
                 
                 // Ajouter les bouteilles de jus
                 output.accept(new ItemStack(ModItems.CHERRY_JUICE_BOTTLE));

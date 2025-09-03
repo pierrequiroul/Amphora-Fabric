@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import be.pierrelac.amphora.ModBlocks;
+import be.pierrelac.amphora.ModBlockAccess;
 import be.pierrelac.amphora.ModPartials;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,7 +57,7 @@ public class AmphoraEmiAnimations {
         int scale = 23;
 
         // Bloc principal de la juice press
-        blockElement(ModBlocks.MECHANICAL_JUICE_PRESS.defaultBlockState())
+        blockElement(ModBlockAccess.getMechanicalJuicePress().defaultBlockState())
             .atLocal(0, 0, 0)
             .scale(scale)
             .render(graphics);

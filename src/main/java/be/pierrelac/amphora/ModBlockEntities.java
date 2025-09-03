@@ -22,7 +22,7 @@ public class ModBlockEntities {
 
         MECHANICAL_JUICE_PRESS = FabricBlockEntityTypeBuilder.<MechanicalJuicePressBlockEntity>create(
             (pos, state) -> new MechanicalJuicePressBlockEntity(MECHANICAL_JUICE_PRESS, pos, state))
-            .addBlocks(ModBlocks.MECHANICAL_JUICE_PRESS)
+            .addBlocks(ModBlockAccess.getMechanicalJuicePress())
             .build();
 
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,
