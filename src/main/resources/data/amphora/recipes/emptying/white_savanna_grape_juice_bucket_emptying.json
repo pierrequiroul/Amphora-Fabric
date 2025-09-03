@@ -1,0 +1,17 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    {
+      "item": "amphora:white_savanna_grape_juice_bucket"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:bucket"
+    },
+    {
+      "fluid": "amphora:white_savanna_grape_juice",
+      "amount": 81000
+    }
+  ]
+}

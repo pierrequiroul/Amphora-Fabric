@@ -1,0 +1,17 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    { 
+      "item": "vinery:white_grapejuice" 
+    }
+  ],
+  "results": [
+    { 
+      "item": "vinery:wine_bottle" 
+    },
+    { 
+      "fluid": "amphora:white_grape_juice", 
+      "amount": 40500 
+    }
+  ]
+}

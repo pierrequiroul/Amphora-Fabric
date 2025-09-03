@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "amphora:block/mechanical_juice_press/block" }
+  }
+}

@@ -1,0 +1,49 @@
+{
+    "_comment_blocks_machines": "Blocs de machines",
+    "block.amphora.mechanical_juice_press": "Presse à jus mécanique",
+    
+    "_comment_emi": "Catégories de recettes EMI",
+    "emi.category.amphora.juice_pressing": "Pressage de jus",
+    "emi.category.amphora.juice_pressing.info": "Pressez les fruits pour extraire les jus en utilisant une Presse à jus mécanique au-dessus d'un Bassin. Nécessite une force rotationnelle.",
+    
+    "_comment_fluids": "Noms des fluides (pour compatibilité JEI/EMI)",
+    "fluid.amphora.red_grape_juice": "Jus de raisin rouge",
+    "fluid.amphora.white_grape_juice": "Jus de raisin blanc",
+    "fluid.amphora.red_savanna_grape_juice": "Jus de raisin rouge de savane",
+    "fluid.amphora.white_savanna_grape_juice": "Jus de raisin blanc de savane",
+    "fluid.amphora.red_taiga_grape_juice": "Jus de raisin rouge de taïga",
+    "fluid.amphora.white_taiga_grape_juice": "Jus de raisin blanc de taïga",
+    "fluid.amphora.red_jungle_grape_juice": "Jus de raisin rouge de jungle",
+    "fluid.amphora.white_jungle_grape_juice": "Jus de raisin blanc de jungle",
+    "fluid.amphora.apple_juice": "Jus de pomme",
+    "fluid.amphora.cherry_juice": "Jus de cerise",
+
+    "_comment_blocks": "Noms des blocs (noms d'affichage réels utilisés par Minecraft)",
+    "block.amphora.red_grape_juice": "Jus de raisin rouge",
+    "block.amphora.white_grape_juice": "Jus de raisin blanc",
+    "block.amphora.red_savanna_grape_juice": "Jus de raisin rouge de savane",
+    "block.amphora.white_savanna_grape_juice": "Jus de raisin blanc de savane",
+    "block.amphora.red_taiga_grape_juice": "Jus de raisin rouge de taïga",
+    "block.amphora.white_taiga_grape_juice": "Jus de raisin blanc de taïga",
+    "block.amphora.red_jungle_grape_juice": "Jus de raisin rouge de jungle",
+    "block.amphora.white_jungle_grape_juice": "Jus de raisin blanc de jungle",
+    "block.amphora.apple_juice": "Jus de pomme",
+    "block.amphora.cherry_juice": "Jus de cerise",
+
+    "_comment_buckets": "Noms des seaux",
+    "item.amphora.red_grape_juice_bucket": "Seau de jus de raisin rouge",
+    "item.amphora.white_grape_juice_bucket": "Seau de jus de raisin blanc",
+    "item.amphora.red_savanna_grape_juice_bucket": "Seau de jus de raisin rouge de savane",
+    "item.amphora.white_savanna_grape_juice_bucket": "Seau de jus de raisin blanc de savane",
+    "item.amphora.red_taiga_grape_juice_bucket": "Seau de jus de raisin rouge de taïga",
+    "item.amphora.white_taiga_grape_juice_bucket": "Seau de jus de raisin blanc de taïga",
+    "item.amphora.red_jungle_grape_juice_bucket": "Seau de jus de raisin rouge de jungle",
+    "item.amphora.white_jungle_grape_juice_bucket": "Seau de jus de raisin blanc de jungle",
+    "item.amphora.apple_juice_bucket": "Seau de jus de pomme",
+    "item.amphora.cherry_juice_bucket": "Seau de jus de cerise",
+
+    "_comment_bottles": "Noms des bouteilles",
+    "item.amphora.cherry_juice_bottle": "Bouteille de jus de cerise",
+
+    "itemGroup.amphora.main": "Create: Vinery"
+}

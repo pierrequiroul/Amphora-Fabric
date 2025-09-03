@@ -1,0 +1,49 @@
+{
+  "itemGroup.amphora.main": "Create: Vinery",
+  
+  "_comment_blocks_machines": "Machine blocks",
+  "block.amphora.mechanical_juice_press": "Mechanical Juice Press",
+  
+  "_comment_emi": "EMI recipe categories",
+  "emi.category.amphora.juice_pressing": "Juice Pressing",
+  "emi.category.amphora.juice_pressing.info": "Press fruits to extract juices using a Mechanical Juice Press above a Basin. Requires rotational power.",
+  
+  "_comment_fluids": "Fluid display names (for JEI/EMI compatibility)",
+  "fluid.amphora.red_grape_juice": "Red Grape Juice",
+  "fluid.amphora.white_grape_juice": "White Grape Juice",
+  "fluid.amphora.red_savanna_grape_juice": "Red Savanna Grape Juice",
+  "fluid.amphora.white_savanna_grape_juice": "White Savanna Grape Juice",
+  "fluid.amphora.red_taiga_grape_juice": "Red Taiga Grape Juice",
+  "fluid.amphora.white_taiga_grape_juice": "White Taiga Grape Juice",
+  "fluid.amphora.red_jungle_grape_juice": "Red Jungle Grape Juice",
+  "fluid.amphora.white_jungle_grape_juice": "White Jungle Grape Juice",
+  "fluid.amphora.apple_juice": "Apple Juice",
+  "fluid.amphora.cherry_juice": "Cherry Juice",
+  
+  "_comment_blocks": "Block names (actual display names used by Minecraft)",
+  "block.amphora.red_grape_juice": "Red Grape Juice",
+  "block.amphora.white_grape_juice": "White Grape Juice",
+  "block.amphora.red_savanna_grape_juice": "Red Savanna Grape Juice",
+  "block.amphora.white_savanna_grape_juice": "White Savanna Grape Juice",
+  "block.amphora.red_taiga_grape_juice": "Red Taiga Grape Juice",
+  "block.amphora.white_taiga_grape_juice": "White Taiga Grape Juice",
+  "block.amphora.red_jungle_grape_juice": "Red Jungle Grape Juice",
+  "block.amphora.white_jungle_grape_juice": "White Jungle Grape Juice",
+  "block.amphora.apple_juice": "Apple Juice",
+  "block.amphora.cherry_juice": "Cherry Juice",
+  
+  "_comment_buckets": "Bucket item names",
+  "item.amphora.red_grape_juice_bucket": "Red Grape Juice Bucket",
+  "item.amphora.white_grape_juice_bucket": "White Grape Juice Bucket",
+  "item.amphora.red_savanna_grape_juice_bucket": "Red Savanna Grape Juice Bucket",
+  "item.amphora.white_savanna_grape_juice_bucket": "White Savanna Grape Juice Bucket",
+  "item.amphora.red_taiga_grape_juice_bucket": "Red Taiga Grape Juice Bucket",
+  "item.amphora.white_taiga_grape_juice_bucket": "White Taiga Grape Juice Bucket",
+  "item.amphora.red_jungle_grape_juice_bucket": "Red Jungle Grape Juice Bucket",
+  "item.amphora.white_jungle_grape_juice_bucket": "White Jungle Grape Juice Bucket",
+  "item.amphora.apple_juice_bucket": "Apple Juice Bucket",
+  "item.amphora.cherry_juice_bucket": "Cherry Juice Bucket",
+  
+  "_comment_bottles": "Bottle item names",
+  "item.amphora.cherry_juice_bottle": "Cherry Juice Bottle"
+}

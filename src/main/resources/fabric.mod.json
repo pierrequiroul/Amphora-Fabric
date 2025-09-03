@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "create_vinery",
+  "id": "amphora",
   "version": "${version}",
-  "name": "Create: Vinery",
+  "name": "Amphora",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Peyrlac"
@@ -11,21 +11,21 @@
     "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
   },
   "license": "CC0",
-  "icon": "assets/create_vinery/icon.png",
+  "icon": "assets/amphora/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "be.pierrelac.create_vinery.CreateVinery"
+      "be.pierrelac.amphora.Amphora"
     ],
     "client": [
-      "be.pierrelac.create_vinery.CreateVineryClient"
+      "be.pierrelac.amphora.AmphoraClient"
     ],
     "emi": [
-      "be.pierrelac.create_vinery.compat.emi.CreateVineryEmiPlugin"
+      "be.pierrelac.amphora.compat.emi.AmphoraEmiPlugin"
     ]
   },
   "mixins": [
-    "create_vinery.mixins.json"
+    "amphora.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

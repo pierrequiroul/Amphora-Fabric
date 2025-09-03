@@ -1,0 +1,20 @@
+{
+  "type": "amphora:juice_pressing",
+  "ingredients": [
+    {
+      "item": "vinery:taiga_grapes_red"
+    }
+  ],
+  "results": [
+    {
+      "fluid": "amphora:red_taiga_grape_juice", 
+      "amount": 85
+    },
+    {
+      "item": "minecraft:wheat_seeds",
+      "count": 1,
+      "chance": 0.1
+    }
+  ],
+  "processingTime": 30
+}

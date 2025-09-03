@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:bucket"
+    },
+    {
+      "fluid": "amphora:apple_juice",
+      "amount": 81000
+    }
+  ],
+  "results": [
+    {
+      "item": "amphora:apple_juice_bucket"
+    }
+  ]
+}

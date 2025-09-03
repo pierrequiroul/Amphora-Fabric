@@ -1,0 +1,44 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "create:block/mechanical_press_pole",
+		"particle": "create:block/mechanical_press_pole"
+	},
+	"elements": [
+		{
+			"name": "MixerCenter",
+			"from": [6.5, 17, 6.5],
+			"to": [9.5, 20, 9.5],
+			"faces": {
+				"north": {"uv": [9, 9, 6, 12], "texture": "#0"},
+				"east": {"uv": [7, 10, 10, 13], "texture": "#0"},
+				"south": {"uv": [6, 9, 9, 12], "texture": "#0"},
+				"west": {"uv": [7, 10, 10, 13], "texture": "#0"},
+				"up": {"uv": [6, 11, 9, 14], "texture": "#0"},
+				"down": {"uv": [6, 11, 9, 14], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Pole1Core",
+			"from": [0, 17.5, 7],
+			"to": [16, 19.5, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 16], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [11, 7, 13, 9], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [4, 0, 6, 16], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [12, 12, 14, 10], "texture": "#0"},
+				"up": {"uv": [2, 0, 4, 16], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [6, 0, 8, 16], "rotation": 90, "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "ScrewCrank",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}
