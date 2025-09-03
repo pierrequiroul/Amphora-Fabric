@@ -20,13 +20,6 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
-/**
- * Plugin EMI pour Create: Vinery
- * Gère l'intégration avec EMI pour les recettes de pressage de jus
- */
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class CreateVineryEmiPlugin implements EmiPlugin {
     
     static {
