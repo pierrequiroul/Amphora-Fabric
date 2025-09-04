@@ -1,6 +1,6 @@
 package be.pierrelac.amphora.content.kinetics.juice_press;
 
-import be.pierrelac.amphora.ModPartials;
+import be.pierrelac.amphora.client.ModPartials;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;

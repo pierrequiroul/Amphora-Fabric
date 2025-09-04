@@ -1,6 +1,6 @@
 package be.pierrelac.amphora.content.kinetics.juice_press;
 
-import be.pierrelac.amphora.ModPartials;
+import be.pierrelac.amphora.client.ModPartials;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;

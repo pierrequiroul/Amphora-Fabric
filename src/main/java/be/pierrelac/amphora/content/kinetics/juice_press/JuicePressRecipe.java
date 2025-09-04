@@ -1,8 +1,9 @@
 package be.pierrelac.amphora.content.kinetics.juice_press;
 
-import be.pierrelac.amphora.ModRecipeTypes;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
+
+import be.pierrelac.amphora.content.core.ModCoreRecipeTypes;
 
 /**
  * Recette de pressage de jus qui utilise le système standard de Create
@@ -11,7 +12,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 public class JuicePressRecipe extends BasinRecipe {
 
     public JuicePressRecipe(ProcessingRecipeParams params) {
-        super(ModRecipeTypes.JUICE_PRESSING, params);
+        super(ModCoreRecipeTypes.JUICE_PRESSING, params);
     }
 
     /**

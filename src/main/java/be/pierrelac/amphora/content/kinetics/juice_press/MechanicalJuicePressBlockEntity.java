@@ -1,7 +1,8 @@
 package be.pierrelac.amphora.content.kinetics.juice_press;
 
 import be.pierrelac.amphora.Amphora;
-import be.pierrelac.amphora.ModRecipeTypes;
+import be.pierrelac.amphora.content.core.ModCoreRecipeTypes;
+
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -167,9 +168,9 @@ public class MechanicalJuicePressBlockEntity extends BasinOperatingBlockEntity {
 
     @Override
     protected Object getRecipeCacheKey() {
-        Object key = ModRecipeTypes.JUICE_PRESSING;
+        Object key = ModCoreRecipeTypes.JUICE_PRESSING;
         Amphora.LOGGER.info("Recipe cache key requested: {} (recipe type: {})", 
-            key, ModRecipeTypes.JUICE_PRESSING.getType());
+            key, ModCoreRecipeTypes.JUICE_PRESSING.getType());
         return key;
     }
 

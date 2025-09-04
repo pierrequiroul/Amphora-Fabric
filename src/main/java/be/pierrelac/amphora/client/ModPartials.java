@@ -1,4 +1,4 @@
-package be.pierrelac.amphora;
+package be.pierrelac.amphora.client;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import net.minecraft.resources.ResourceLocation;
@@ -18,13 +18,10 @@ public class ModPartials {
         new PartialModel(new ResourceLocation("amphora", "block/mechanical_juice_press/shaft"));
 
     /**
-     * Initialise les modèles partiels - appelé depuis ModClient
+     * Initialise tous les modèles partiels.
+     * Appelé depuis AmphoraClient pour s'assurer que les modèles sont enregistrés.
      */
     public static void init() {
-        // Force le chargement de la classe et l'initialisation des constantes
-        System.out.println("[Create Vinery] Loading partial models...");
-        System.out.println("- JUICE_PRESS_SCREW: " + JUICE_PRESS_SCREW);
-        System.out.println("- JUICE_PRESS_HANDLE: " + JUICE_PRESS_HANDLE);
-        System.out.println("- JUICE_PRESS_SHAFT: " + JUICE_PRESS_SHAFT);
+        // L'initialisation se fait automatiquement par l'accès aux champs statiques
     }
 }

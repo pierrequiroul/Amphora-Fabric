@@ -1,46 +1,40 @@
-# Structure du Mod Create: Vinery
+# Amphora - Create: Vinery Fluid Integration
 
 ## Vue d'ensemble
-Ce mod ajoute des fluides de jus à Create en utilisant l'intégration Fabric.
+Ce mod ajoute une intégration fluide entre Create et Vinery, permettant la production automatisée de jus via des machines cinétiques.
 
-## Architecture du Code
+## Architecture Moderne (Post-Migration)
 
-### Fichiers Principaux
-- **`CreateVinery.java`** : Point d'entrée du mod, initialise tout
-- **`JuiceTypes.java`** : Enum centralisant tous les types de jus (ID, nom, couleur)
-- **`ModFluids.java`** : Enregistrement des fluides basé sur JuiceTypes
-- **`FabricFluidHelpers.java`** : Intégration Fabric pour les interactions bouteilles/seaux
+### Structure Registrate Modulaire
+- **`Amphora.java`** : Point d'entrée principal du mod
+- **`AmphoraRegistrate.java`** : Système d'enregistrement conditionnel 
+- **`ModCoreContent.java`** : Fluides de base (toujours présents)
+- **`ModVineryContent.java`** : Fluides Vinery (conditionnels)
 
-### Côté Client
-- **`client/ModClient.java`** : Enregistre les handlers de rendu
-- **`client/FluidRenderHandlerFactory.java`** : Factory pour créer les handlers colorés
+### Fluides Disponibles
 
-## Ajouter un Nouveau Jus
+**Fluides Core** (toujours actifs):
+- Apple Juice (jus de pomme)
+- Cherry Juice (jus de cerise)
 
-1. Ajouter une entrée dans `JuiceTypes.java` :
+**Fluides Vinery** (si mod présent):
+- 8 variantes de jus de raisin par biomes (rouge/blanc × standard/savanna/taiga/jungle)
+
+### Ajout d'un Nouveau Fluide Core
+
+1. Dans `ModCoreContent.java`:
 ```java
-NEW_JUICE("new_juice", "fluid.create_vinery.new_juice", 0xFF5733)
+public static final FluidEntry<SimpleFlowableFluid.Flowing> NEW_JUICE = 
+    AmphoraRegistrate.INSTANCE.coloredJuiceFluid("new_juice", 0xFF5733)
+        .lang("New Juice")
+        .tag(AmphoraRegistrate.JUICE_TAG)
+        .register();
 ```
 
-2. Ajouter les traductions dans `assets/create_vinery/lang/en_us.json` :
-```json
-"fluid.create_vinery.new_juice": "New Juice"
-```
+2. Ajouter le rendering dans `AmphoraClient.java`
+3. Ajouter les recettes de pressage dans `data/`
 
-3. Ajouter les ressources :
-- Blockstate: `assets/create_vinery/blockstates/new_juice.json`
-- Modèle: `assets/create_vinery/models/block/fluid/new_juice.json`
-
-## Resources Layout
-
-### Textures Partagées
-- `assets/create_vinery/textures/fluid/juice_still.png` : Texture statique
-- `assets/create_vinery/textures/fluid/juice_flow.png` : Texture qui coule
-
-### Modèles
-- Tous les fluides utilisent `minecraft:block/fluid` comme parent
-- Référencent les textures partagées qui sont teintées au runtime
-
-### Blockstates
-- Définissent les variantes `level=0` à `level=15`
-- Pointent vers `create_vinery:block/fluid/{nom_du_jus}`
+### Architecture Moderne
+Le système utilise exclusivement **Registrate Refabricated** pour tous les fluides :
+- **Fluides Core** : Toujours enregistrés (apple_juice, cherry_juice)
+- **Fluides Vinery** : Enregistrés conditionnellement si Vinery est présent

@@ -1,6 +1,6 @@
-package be.pierrelac.amphora;
+package be.pierrelac.amphora.content.core;
 
-import be.pierrelac.amphora.content.kinetics.juice_press.MechanicalJuicePressBlock;
+import be.pierrelac.amphora.Amphora;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,28 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Gestion de tous les blocs du mod Create: Vinery
+ * Gestionnaire spécialisé pour les blocs de fluides
+ * Séparé de ModBlocks pour une responsabilité claire
  */
-public class ModBlocks {
+public class ModCoreFluidBlocks {
 
     // Registre pour tous les blocs de fluide
-    public static final Map<String, Block> FLUID_BLOCKS = new HashMap<>();
-
-    // Blocs mécaniques
-    public static final Block MECHANICAL_JUICE_PRESS = Registry.register(
-        BuiltInRegistries.BLOCK,
-        new ResourceLocation(Amphora.ID, "mechanical_juice_press"),
-        new MechanicalJuicePressBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque())
-    );
-
-    /**
-     * Méthode d'enregistrement pour s'assurer que tous les blocs sont initialisés
-     */
-    public static void register() {
-        Amphora.LOGGER.info("Registering Create: Vinery blocks");
-        // Les blocs statiques sont déjà enregistrés, cette méthode force l'initialisation de la classe
-        Amphora.LOGGER.info("✓ Blocks registered successfully");
-    }
+    private static final Map<String, LiquidBlock> FLUID_BLOCKS = new HashMap<>();
 
     /**
      * Enregistre un bloc de fluide liquide
@@ -44,7 +29,7 @@ public class ModBlocks {
         String blockName = juiceId + "_juice";
         ResourceLocation blockId = new ResourceLocation("amphora", blockName);
 
-        // Utiliser exactement la même signature que dans ModFluids
+        // Créer le bloc de fluide avec les propriétés standard
         var fluidBlock = new LiquidBlock(stillFluid, FabricBlockSettings.copy(Blocks.WATER));
 
         Registry.register(BuiltInRegistries.BLOCK, blockId, fluidBlock);
@@ -59,5 +44,19 @@ public class ModBlocks {
      */
     public static Block getFluidBlock(String juiceId) {
         return FLUID_BLOCKS.get(juiceId);
+    }
+
+    /**
+     * Récupère tous les blocs de fluides enregistrés
+     */
+    public static Map<String, LiquidBlock> getAllFluidBlocks() {
+        return new HashMap<>(FLUID_BLOCKS);
+    }
+
+    /**
+     * Vérifie si un bloc de fluide existe pour un juice ID donné
+     */
+    public static boolean hasFluidBlock(String juiceId) {
+        return FLUID_BLOCKS.containsKey(juiceId);
     }
 }

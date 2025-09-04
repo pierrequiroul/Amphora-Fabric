@@ -1,6 +1,6 @@
 package be.pierrelac.amphora.content.kinetics.juice_press;
 
-import be.pierrelac.amphora.ModBlockEntities;
+import be.pierrelac.amphora.content.core.ModCoreBlockEntities;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -80,7 +80,7 @@ public class MechanicalJuicePressBlock extends KineticBlock implements IBE<Mecha
 
     @Override
     public BlockEntityType<? extends MechanicalJuicePressBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.MECHANICAL_JUICE_PRESS;
+        return ModCoreBlockEntities.MECHANICAL_JUICE_PRESS;
     }
 
     @Override

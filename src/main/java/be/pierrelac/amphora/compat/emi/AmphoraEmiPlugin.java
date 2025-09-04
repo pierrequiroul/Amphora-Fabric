@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import be.pierrelac.amphora.Amphora;
-import be.pierrelac.amphora.ModBlocks;
-import be.pierrelac.amphora.ModRecipeTypes;
+import be.pierrelac.amphora.content.core.ModCoreBlocks;
+import be.pierrelac.amphora.content.core.ModCoreRecipeTypes;
 import be.pierrelac.amphora.compat.emi.recipes.JuicePressEmiRecipe;
 import be.pierrelac.amphora.content.kinetics.juice_press.JuicePressRecipe;
 import com.simibubi.create.AllBlocks;
@@ -34,7 +34,7 @@ public class AmphoraEmiPlugin implements EmiPlugin {
 
     // Catégorie pour le pressage de jus
     public static final EmiRecipeCategory JUICE_PRESSING = register("juice_pressing", 
-        DoubleItemIcon.of(ModBlocks.MECHANICAL_JUICE_PRESS, AllBlocks.BASIN.get()));
+        DoubleItemIcon.of(ModCoreBlocks.MECHANICAL_JUICE_PRESS.get(), AllBlocks.BASIN.get()));
 
     @Override
     public void register(EmiRegistry registry) {
@@ -47,11 +47,11 @@ public class AmphoraEmiPlugin implements EmiPlugin {
         });
 
         // Ajouter les stations de travail pour le juice press
-        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(ModBlocks.MECHANICAL_JUICE_PRESS));
+        registry.addWorkstation(JUICE_PRESSING, EmiStack.of(ModCoreBlocks.MECHANICAL_JUICE_PRESS.get()));
         registry.addWorkstation(JUICE_PRESSING, EmiStack.of(AllBlocks.BASIN.get()));
 
         // Ajouter les recettes de pressage de jus
-        addAllJuicePress(registry, ModRecipeTypes.JUICE_PRESSING.getType(), JUICE_PRESSING);
+        addAllJuicePress(registry, ModCoreRecipeTypes.JUICE_PRESSING.getType(), JUICE_PRESSING);
 
         Amphora.LOGGER.error("=== CREATE VINERY EMI PLUGIN: Registration completed ===");
     }

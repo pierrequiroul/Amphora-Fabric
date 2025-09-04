@@ -1,5 +1,6 @@
-package be.pierrelac.amphora;
+package be.pierrelac.amphora.content.core;
 
+import be.pierrelac.amphora.Amphora;
 import be.pierrelac.amphora.content.kinetics.juice_press.MechanicalJuicePressBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 /**
  * Gestion de tous les BlockEntityTypes du mod Create: Vinery
  */
-public class ModBlockEntities {
+public class ModCoreBlockEntities {
 
     public static BlockEntityType<MechanicalJuicePressBlockEntity> MECHANICAL_JUICE_PRESS;
 
@@ -22,7 +23,7 @@ public class ModBlockEntities {
 
         MECHANICAL_JUICE_PRESS = FabricBlockEntityTypeBuilder.<MechanicalJuicePressBlockEntity>create(
             (pos, state) -> new MechanicalJuicePressBlockEntity(MECHANICAL_JUICE_PRESS, pos, state))
-            .addBlocks(ModBlocks.MECHANICAL_JUICE_PRESS)
+            .addBlocks(ModCoreBlocks.MECHANICAL_JUICE_PRESS.get())
             .build();
 
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,

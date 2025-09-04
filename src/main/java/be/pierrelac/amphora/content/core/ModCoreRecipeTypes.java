@@ -1,5 +1,6 @@
-package be.pierrelac.amphora;
+package be.pierrelac.amphora.content.core;
 
+import be.pierrelac.amphora.Amphora;
 import be.pierrelac.amphora.content.kinetics.juice_press.JuicePressRecipeSerializer;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeFactory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
@@ -15,9 +16,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import java.util.function.Supplier;
 
 /**
- * Types de recettes du mod Create: Vinery
+ * Types de recettes centralisés pour Amphora
+ * Gère tous les types de recettes du mod de façon centralisée
  */
-public enum ModRecipeTypes implements IRecipeTypeInfo {
+public enum ModCoreRecipeTypes implements IRecipeTypeInfo {
 
     JUICE_PRESSING(() -> new JuicePressRecipeSerializer());
 
@@ -26,7 +28,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     private final RecipeType<?> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+    ModCoreRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = new ResourceLocation(Amphora.ID, name);
         serializerObject = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, id, serializerSupplier.get());
@@ -36,7 +38,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     }
 
     // Constructeur alternatif pour les recettes de traitement standard
-    ModRecipeTypes(ProcessingRecipeFactory<?> processingFactory) {
+    ModCoreRecipeTypes(ProcessingRecipeFactory<?> processingFactory) {
         String name = Lang.asId(name());
         id = new ResourceLocation(Amphora.ID, name);
         serializerObject = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, id, new ProcessingRecipeSerializer<>(processingFactory));
@@ -56,9 +58,9 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     }
 
     public static void register() {
-        Amphora.LOGGER.info("Registering Create: Vinery recipe types");
+        Amphora.LOGGER.info("Registering Amphora core recipe types");
         // Charge la classe et initialise les enums
-        Amphora.LOGGER.info("✓ Recipe types registered successfully");
+        Amphora.LOGGER.info("✓ Core recipe types registered successfully");
     }
 
     @Override

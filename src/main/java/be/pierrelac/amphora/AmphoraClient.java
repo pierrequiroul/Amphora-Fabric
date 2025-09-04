@@ -1,7 +1,12 @@
 package be.pierrelac.amphora;
 
 import be.pierrelac.amphora.content.kinetics.juice_press.MechanicalJuicePressRenderer;
-import be.pierrelac.amphora.content.fluids.juice.JuiceBucketItem;
+import be.pierrelac.amphora.content.core.ModCoreBlocks;
+import be.pierrelac.amphora.content.core.ModCoreContent;
+import be.pierrelac.amphora.content.core.ModCoreBlockEntities;
+import be.pierrelac.amphora.content.vinery.ModVineryContent;
+import be.pierrelac.amphora.client.ModPartials;
+import com.tterrag.registrate.fabric.SimpleFlowableFluid;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,67 +40,160 @@ public class AmphoraClient implements ClientModInitializer {
     }
 
     private void registerFluidRendering() {
-        Amphora.LOGGER.info("Registering Fabric fluid rendering for {} juice types", ModFluids.STILL_FLUIDS.size());
+        Amphora.LOGGER.info("Registering fluid rendering for modern Registrate fluids");
 
-        // Enregistrer les renderers pour chaque jus avec leurs textures spécifiques
-        ModFluids.STILL_FLUIDS.forEach((juiceId, stillFluid) -> {
-            var flowingFluid = ModFluids.FLOWING_FLUIDS.get(juiceId);
-            var color = ModFluids.JUICE_COLORS.get(juiceId);
-            var stillTexturePath = ModFluids.getStillTexture(juiceId);
-            var flowTexturePath = ModFluids.getFlowTexture(juiceId);
+        // Enregistrer les fluides Registrate avec textures communes et couleurs spécifiques
+        registerRegistrateFluidRendering("apple_juice", ModCoreContent.APPLE_JUICE);
+        registerRegistrateFluidRendering("cherry_juice", ModCoreContent.CHERRY_JUICE);
+        
+        // Enregistrer les fluides Vinery conditionnellement
+        if (AmphoraRegistrate.isModLoaded("vinery")) {
+            registerVineryFluidRendering();
+        }
 
-            if (flowingFluid != null && color != null && stillTexturePath != null && flowTexturePath != null) {
-                // Créer les ResourceLocations pour les textures spécifiques à ce fluide
-                var juiceStillTexture = new ResourceLocation("amphora", stillTexturePath);
-                var juiceFlowTexture = new ResourceLocation("amphora", flowTexturePath);
-                
-                // Créer un renderer avec les textures spécifiques et coloration
-                var handler = new SimpleFluidRenderHandler(juiceStillTexture, juiceFlowTexture, color);
+        Amphora.LOGGER.info("All juice fluid rendering registration complete via Registrate system");
+    }
+    
+    private void registerRegistrateFluidRendering(String fluidId, 
+            com.tterrag.registrate.util.entry.FluidEntry<? extends SimpleFlowableFluid> fluidEntry) {
+        var color = AmphoraRegistrate.getRegistrateJuiceColor(fluidId);
+        
+        if (color != null) {
+            // Utiliser les textures communes du jus de raisin
+            var juiceStillTexture = new ResourceLocation("amphora", "fluid/grapejuice_still");
+            var juiceFlowTexture = new ResourceLocation("amphora", "fluid/juice_flow");
+            
+            // Créer un renderer avec les textures communes et la couleur spécifique
+            var handler = new SimpleFluidRenderHandler(juiceStillTexture, juiceFlowTexture, color);
 
-                FluidRenderHandlerRegistry.INSTANCE.register(stillFluid, handler);
-                FluidRenderHandlerRegistry.INSTANCE.register(flowingFluid, handler);
+            FluidRenderHandlerRegistry.INSTANCE.register(fluidEntry.get(), handler);
+            FluidRenderHandlerRegistry.INSTANCE.register(fluidEntry.getSource(), handler);
 
-                Amphora.LOGGER.info("✓ Registered juice rendering for {} with textures [still: {}, flow: {}] and color 0x{}", 
-                    juiceId, stillTexturePath, flowTexturePath, Integer.toHexString(color));
-            } else {
-                Amphora.LOGGER.warn("✗ Missing data for fluid {}: flowing={}, color={}, stillTexture={}, flowTexture={}", 
-                    juiceId, flowingFluid, color, stillTexturePath, flowTexturePath);
-            }
-        });
-
-        Amphora.LOGGER.info("Juice fluid rendering registration complete");
+            Amphora.LOGGER.info("✓ Registered Registrate juice rendering for {} with common textures and color 0x{}", 
+                fluidId, Integer.toHexString(color));
+        } else {
+            Amphora.LOGGER.warn("✗ No color found for Registrate fluid {}", fluidId);
+        }
+    }
+    
+    private void registerVineryFluidRendering() {
+        Amphora.LOGGER.info("Registering Vinery grape juice fluid rendering");
+        
+        // Fluides de raisin standards
+        if (ModVineryContent.RED_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("red_grape_juice", ModVineryContent.RED_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("white_grape_juice", ModVineryContent.WHITE_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de savane
+        if (ModVineryContent.RED_SAVANNA_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("red_savanna_grape_juice", ModVineryContent.RED_SAVANNA_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_SAVANNA_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("white_savanna_grape_juice", ModVineryContent.WHITE_SAVANNA_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de taïga
+        if (ModVineryContent.RED_TAIGA_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("red_taiga_grape_juice", ModVineryContent.RED_TAIGA_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_TAIGA_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("white_taiga_grape_juice", ModVineryContent.WHITE_TAIGA_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de jungle
+        if (ModVineryContent.RED_JUNGLE_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("red_jungle_grape_juice", ModVineryContent.RED_JUNGLE_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_JUNGLE_GRAPE_JUICE != null) {
+            registerRegistrateFluidRendering("white_jungle_grape_juice", ModVineryContent.WHITE_JUNGLE_GRAPE_JUICE);
+        }
+        
+        Amphora.LOGGER.info("Vinery grape juice fluid rendering registered");
+    }
+    
+    private void registerVineryBucketColors() {
+        Amphora.LOGGER.info("Registering Vinery grape juice bucket colors");
+        
+        // Fluides de raisin standards
+        if (ModVineryContent.RED_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("red_grape_juice", ModVineryContent.RED_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("white_grape_juice", ModVineryContent.WHITE_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de savane
+        if (ModVineryContent.RED_SAVANNA_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("red_savanna_grape_juice", ModVineryContent.RED_SAVANNA_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_SAVANNA_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("white_savanna_grape_juice", ModVineryContent.WHITE_SAVANNA_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de taïga
+        if (ModVineryContent.RED_TAIGA_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("red_taiga_grape_juice", ModVineryContent.RED_TAIGA_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_TAIGA_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("white_taiga_grape_juice", ModVineryContent.WHITE_TAIGA_GRAPE_JUICE);
+        }
+        
+        // Fluides de raisin de jungle
+        if (ModVineryContent.RED_JUNGLE_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("red_jungle_grape_juice", ModVineryContent.RED_JUNGLE_GRAPE_JUICE);
+        }
+        if (ModVineryContent.WHITE_JUNGLE_GRAPE_JUICE != null) {
+            registerRegistrateBucketColor("white_jungle_grape_juice", ModVineryContent.WHITE_JUNGLE_GRAPE_JUICE);
+        }
+        
+        Amphora.LOGGER.info("Vinery grape juice bucket colors registered");
     }
 
     private void registerBucketColors() {
-        Amphora.LOGGER.info("Registering bucket colors for {} juice types", ModFluids.STILL_FLUIDS.size());
+        Amphora.LOGGER.info("Registering bucket colors for modern Registrate fluids");
 
-        // Enregistrer les couleurs pour chaque seau de jus
-        ModFluids.STILL_FLUIDS.forEach((juiceId, stillFluid) -> {
-            var bucketItem = stillFluid.getBucket();
-            var color = ModFluids.JUICE_COLORS.get(juiceId);
+        // Enregistrer les couleurs pour les seaux Registrate
+        registerRegistrateBucketColor("apple_juice", ModCoreContent.APPLE_JUICE);
+        registerRegistrateBucketColor("cherry_juice", ModCoreContent.CHERRY_JUICE);
+        
+        // Enregistrer les seaux Vinery conditionnellement
+        if (AmphoraRegistrate.isModLoaded("vinery")) {
+            registerVineryBucketColors();
+        }
 
-            if (bucketItem instanceof JuiceBucketItem && color != null) {
-                ColorProviderRegistry.ITEM.register(
-                    (stack, tintIndex) -> tintIndex == 1 ? color : 0xFFFFFF,
-                    bucketItem
-                );
-                Amphora.LOGGER.info("✓ Registered bucket color for {} with color 0x{}", juiceId, Integer.toHexString(color));
-            } else {
-                Amphora.LOGGER.warn("✗ Could not register bucket color for {}: bucket={}, color={}", juiceId, bucketItem.getClass().getSimpleName(), color);
-            }
-        });
-
-        Amphora.LOGGER.info("Bucket color registration complete");
+        Amphora.LOGGER.info("All bucket color registration complete via Registrate system");
+    }
+    
+    private void registerRegistrateBucketColor(String fluidId, 
+            com.tterrag.registrate.util.entry.FluidEntry<? extends SimpleFlowableFluid> fluidEntry) {
+        var color = AmphoraRegistrate.getRegistrateJuiceColor(fluidId);
+        
+        if (color != null) {
+            var bucketItem = fluidEntry.getSource().getBucket();
+            
+            ColorProviderRegistry.ITEM.register(
+                (stack, tintIndex) -> tintIndex == 1 ? color : 0xFFFFFF,
+                bucketItem
+            );
+            
+            Amphora.LOGGER.info("✓ Registered Registrate bucket color for {} with color 0x{}", 
+                fluidId, Integer.toHexString(color));
+        } else {
+            Amphora.LOGGER.warn("✗ No color found for Registrate bucket {}", fluidId);
+        }
     }
 
     private static void registerBlockEntityRenderers() {
-        BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_JUICE_PRESS, MechanicalJuicePressRenderer::new);
+        BlockEntityRenderers.register(ModCoreBlockEntities.MECHANICAL_JUICE_PRESS, MechanicalJuicePressRenderer::new);
         Amphora.LOGGER.info("Registered BlockEntity renderer for mechanical juice press");
     }
 
     private static void registerFlywheelVisuals() {
         // Temporairement désactivé pour débugger le rendu
-        // com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry.configure(ModBlockEntities.MECHANICAL_JUICE_PRESS)
+        // com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry.configure(ModCoreBlockEntities.MECHANICAL_JUICE_PRESS)
         //     .factory(be.pierrelac.amphora.content.kinetics.juice_press.JuicePressVisual::new);
 
         Amphora.LOGGER.info("Flywheel visual registration DISABLED for debugging");
@@ -106,7 +204,7 @@ public class AmphoraClient implements ClientModInitializer {
      */
     private static void registerBlockRenderLayers() {
         // Activer la transparence alpha pour le châssis de la presse à jus mécanique
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MECHANICAL_JUICE_PRESS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModCoreBlocks.MECHANICAL_JUICE_PRESS.get(), RenderType.cutout());
 
         Amphora.LOGGER.info("Registered block render layers for transparency support");
     }

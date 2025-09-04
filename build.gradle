@@ -71,6 +71,9 @@ dependencies {
 	// Create - dependencies are added transitively (inclut déjà Flywheel)
 	modImplementation("com.simibubi.create:create-fabric-$minecraft_version:$create_version")
 
+	// Registrate Refabricated for cleaner registration
+	modImplementation("com.tterrag.registrate_fabric:Registrate:$registrate_version")
+
     // Let's do Vinery
     modImplementation("curse.maven:lets-do-vinery-704465:${vinery_fabric_fileid}")
     modImplementation("dev.architectury:architectury-fabric:${architectury_version}")
