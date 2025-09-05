@@ -37,6 +37,29 @@ public class ModCoreContent {
             .build()
             .register();
     
+    // Wine fluids for fermentation
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> APPLE_WINE = 
+        AmphoraRegistrate.coloredJuiceFluid("apple_wine", 0xd4a574)
+            .lang("Apple Wine")
+            .tag(AmphoraRegistrate.WINE_TAG)
+            .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("fluid.amphora.apple_wine"))
+            .source(SimpleFlowableFluid.Source::new)
+            .bucket()
+            .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+            .build()
+            .register();
+    
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> CHERRY_WINE = 
+        AmphoraRegistrate.coloredJuiceFluid("cherry_wine", 0xa33a44)
+            .lang("Cherry Wine")
+            .tag(AmphoraRegistrate.WINE_TAG)
+            .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("fluid.amphora.cherry_wine"))
+            .source(SimpleFlowableFluid.Source::new)
+            .bucket()
+            .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+            .build()
+            .register();
+    
     public static void register() {
         AmphoraRegistrate.logModularRegistration("core", "base content");
         

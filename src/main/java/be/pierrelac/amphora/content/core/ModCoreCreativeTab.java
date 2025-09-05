@@ -33,6 +33,9 @@ public class ModCoreCreativeTab {
                 // Ajouter le pressoir mécanique depuis Registrate
                 output.accept(ModCoreBlocks.MECHANICAL_JUICE_PRESS.asStack());
                 
+                // Ajouter la valve de fermentation depuis Registrate
+                output.accept(ModCoreBlocks.FERMENTATION_VALVE.asStack());
+                
                 // Ajouter la bouteille de jus de cerise depuis Registrate
                 output.accept(ModCoreItems.CHERRY_JUICE_BOTTLE.asStack());
                 

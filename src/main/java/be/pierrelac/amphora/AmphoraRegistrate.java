@@ -39,6 +39,12 @@ public class AmphoraRegistrate {
     /** Tag pour tous les buckets de jus */
     public static final TagKey<Item> JUICE_BUCKET_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(Amphora.ID, "juice_buckets"));
     
+    /** Tag pour tous les fluides de vin */
+    public static final TagKey<Fluid> WINE_TAG = TagKey.create(Registries.FLUID, new ResourceLocation(Amphora.ID, "wines"));
+    
+    /** Tag pour tous les buckets de vin */
+    public static final TagKey<Item> WINE_BUCKET_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(Amphora.ID, "wine_buckets"));
+    
     // ===== MÉTHODES UTILITAIRES POUR FLUIDES =====
     
     /**
@@ -75,6 +81,15 @@ public class AmphoraRegistrate {
     }
     
     /**
+     * Crée des attributs de fluide pour les vins compatibles Fabric
+     * @param translationKey la clé de traduction du fluide
+     * @return FluidVariantAttributeHandler configuré pour les vins
+     */
+    public static FluidVariantAttributeHandler createWineAttributes(String translationKey) {
+        return new WineAttributeHandler(translationKey);
+    }
+    
+    /**
      * Handler d'attributs de fluide spécialisé pour les jus - compatible Fabric
      */
     private static class JuiceAttributeHandler implements FluidVariantAttributeHandler {
@@ -97,6 +112,32 @@ public class AmphoraRegistrate {
         @Override
         public boolean isLighterThanAir(FluidVariant variant) {
             return false; // Les jus sont plus lourds que l'air
+        }
+    }
+    
+    /**
+     * Handler d'attributs de fluide spécialisé pour les vins - compatible Fabric
+     */
+    private static class WineAttributeHandler implements FluidVariantAttributeHandler {
+        private final Component name;
+        
+        public WineAttributeHandler(String translationKey) {
+            this.name = Component.translatable(translationKey);
+        }
+        
+        @Override
+        public Component getName(FluidVariant fluidVariant) {
+            return name.copy();
+        }
+        
+        @Override
+        public int getViscosity(FluidVariant variant, @Nullable Level world) {
+            return 1200; // Vins légèrement plus épais que les jus
+        }
+        
+        @Override
+        public boolean isLighterThanAir(FluidVariant variant) {
+            return false; // Les vins sont plus lourds que l'air
         }
     }
     

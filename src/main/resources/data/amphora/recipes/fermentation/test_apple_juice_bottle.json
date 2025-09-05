@@ -1,0 +1,16 @@
+{
+  "type": "create:filling",
+  "_comment": "Example recipe showing how to test juice to wine fermentation",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "results": [
+    {
+      "item": "amphora:apple_juice_bucket",
+      "fluid": "amphora:apple_juice",
+      "amount": 250
+    }
+  ]
+}

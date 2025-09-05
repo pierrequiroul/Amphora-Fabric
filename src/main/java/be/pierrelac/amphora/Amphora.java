@@ -9,6 +9,7 @@ import be.pierrelac.amphora.content.core.ModCoreRecipeTypes;
 import be.pierrelac.amphora.content.core.ModCoreCreativeTab;
 import be.pierrelac.amphora.content.core.ModCoreBlockEntities;
 import be.pierrelac.amphora.content.vinery.ModVineryContent;
+import be.pierrelac.amphora.content.kinetics.fermenter.recipe.ModRecipeTypes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,7 @@ public class Amphora implements ModInitializer {
 
         // Enregistrer les types de recettes
         ModCoreRecipeTypes.register();
+        ModRecipeTypes.register(); // Recettes de fermentation JSON
 
         // Finaliser l'enregistrement Registrate D'ABORD (pour les fluides core)
         AmphoraRegistrate.REGISTRATE.register();

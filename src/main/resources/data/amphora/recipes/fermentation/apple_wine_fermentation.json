@@ -1,0 +1,18 @@
+{
+  "type": "amphora:fermentation",
+  "ingredient": {
+    "fluid": "vinery:apple_juice",
+    "amount": 100
+  },
+  "result": {
+    "fluid": "vinery:apple_wine",
+    "amount": 100
+  },
+  "baseTime": 200,
+  "minRpm": 16,
+  "quantumSize": 100,
+  "conditions": {
+    "temperature": "ambient",
+    "pressure": "normal"
+  }
+}

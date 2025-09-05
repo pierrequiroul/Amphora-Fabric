@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "amphora:block/fermentation_valve/block"
+    },
+    "facing=south": {
+      "model": "amphora:block/fermentation_valve/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "amphora:block/fermentation_valve/block",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "amphora:block/fermentation_valve/block",
+      "y": 90
+    }
+  }
+}

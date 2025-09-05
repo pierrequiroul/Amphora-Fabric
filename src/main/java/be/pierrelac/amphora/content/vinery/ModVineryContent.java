@@ -122,6 +122,117 @@ public class ModVineryContent {
                 .register()
         );
     
+    // ===== VINERY WINES (CONDITIONNELS) =====
+    // Vins obtenus par fermentation des jus de raisin
+    
+    // Vins standards
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> RED_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("red_grape_wine", 0x5c2a5a)
+                .lang("Red Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.red_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> WHITE_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("white_grape_wine", 0xa19e3c)
+                .lang("White Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.white_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    // Vins de savane
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> RED_SAVANNA_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("red_savanna_grape_wine", 0x7b4b3a)
+                .lang("Red Savanna Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.red_savanna_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> WHITE_SAVANNA_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("white_savanna_grape_wine", 0x9ba038)
+                .lang("White Savanna Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.white_savanna_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    // Vins de taïga
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> RED_TAIGA_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("red_taiga_grape_wine", 0x522792)
+                .lang("Red Taiga Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.red_taiga_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> WHITE_TAIGA_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("white_taiga_grape_wine", 0x8ca344)
+                .lang("White Taiga Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.white_taiga_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    // Vins de jungle
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> RED_JUNGLE_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("red_jungle_grape_wine", 0x7a2e6a)
+                .lang("Red Jungle Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.red_jungle_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
+    public static final FluidEntry<SimpleFlowableFluid.Flowing> WHITE_JUNGLE_GRAPE_WINE = 
+        AmphoraRegistrate.whenModLoaded("vinery", () ->
+            AmphoraRegistrate.coloredJuiceFluid("white_jungle_grape_wine", 0x8fa04a)
+                .lang("White Jungle Grape Wine")
+                .tag(AmphoraRegistrate.WINE_TAG)
+                .fluidAttributes(() -> AmphoraRegistrate.createWineAttributes("block.amphora.white_jungle_grape_wine"))
+                .source(SimpleFlowableFluid.Source::new)
+                .bucket()
+                .tag(AmphoraRegistrate.WINE_BUCKET_TAG)
+                .build()
+                .register()
+        );
+    
     /**
      * Initialise le contenu Vinery (appel statique pour trigger l'enregistrement)
      */

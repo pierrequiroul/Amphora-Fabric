@@ -1,0 +1,18 @@
+{
+  "type": "amphora:fermentation",
+  "ingredient": {
+    "fluid": "amphora:red_grape_juice",
+    "amount": 100
+  },
+  "result": {
+    "fluid": "vinery:red_wine",
+    "amount": 100
+  },
+  "baseTime": 300,
+  "minRpm": 20,
+  "quantumSize": 100,
+  "conditions": {
+    "temperature": "ambient",
+    "pressure": "normal"
+  }
+}

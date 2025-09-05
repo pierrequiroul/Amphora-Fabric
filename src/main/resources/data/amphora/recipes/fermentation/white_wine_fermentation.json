@@ -1,0 +1,18 @@
+{
+  "type": "amphora:fermentation",
+  "ingredient": {
+    "fluid": "vinery:white_grape_juice",
+    "amount": 100
+  },
+  "result": {
+    "fluid": "vinery:white_wine",
+    "amount": 100
+  },
+  "baseTime": 280,
+  "minRpm": 18,
+  "quantumSize": 100,
+  "conditions": {
+    "temperature": "ambient",
+    "pressure": "normal"
+  }
+}

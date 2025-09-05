@@ -1,0 +1,14 @@
+{
+  "type": "amphora:fermentation",
+  "input_fluid": {
+    "fluid": "vinery:red_grape_juice",
+    "amount": 1000
+  },
+  "output_fluid": {
+    "fluid": "vinery:red_wine",
+    "amount": 1000
+  },
+  "processing_time": 300,
+  "min_rpm": 20,
+  "quantum_size": 100
+}

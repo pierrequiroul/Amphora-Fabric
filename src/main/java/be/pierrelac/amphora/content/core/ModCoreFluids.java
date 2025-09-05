@@ -36,6 +36,10 @@ public class ModCoreFluids {
         registerFluid("apple_juice", APPLE_JUICE);
         registerFluid("cherry_juice", CHERRY_JUICE);
         
+        // Vins Core (toujours disponibles)
+        registerFluid("apple_wine", ModCoreContent.APPLE_WINE);
+        registerFluid("cherry_wine", ModCoreContent.CHERRY_WINE);
+        
         // Fluides Vinery (conditionnels - via réflexion depuis ModVineryContent)
         registerVineryFluidsIfAvailable();
     }
@@ -53,6 +57,16 @@ public class ModCoreFluids {
         registerFluidIfAvailable("white_taiga_grape_juice", ModVineryContent.WHITE_TAIGA_GRAPE_JUICE);
         registerFluidIfAvailable("red_jungle_grape_juice", ModVineryContent.RED_JUNGLE_GRAPE_JUICE);
         registerFluidIfAvailable("white_jungle_grape_juice", ModVineryContent.WHITE_JUNGLE_GRAPE_JUICE);
+        
+        // Enregistrer les vins Vinery
+        registerFluidIfAvailable("red_grape_wine", ModVineryContent.RED_GRAPE_WINE);
+        registerFluidIfAvailable("white_grape_wine", ModVineryContent.WHITE_GRAPE_WINE);
+        registerFluidIfAvailable("red_savanna_grape_wine", ModVineryContent.RED_SAVANNA_GRAPE_WINE);
+        registerFluidIfAvailable("white_savanna_grape_wine", ModVineryContent.WHITE_SAVANNA_GRAPE_WINE);
+        registerFluidIfAvailable("red_taiga_grape_wine", ModVineryContent.RED_TAIGA_GRAPE_WINE);
+        registerFluidIfAvailable("white_taiga_grape_wine", ModVineryContent.WHITE_TAIGA_GRAPE_WINE);
+        registerFluidIfAvailable("red_jungle_grape_wine", ModVineryContent.RED_JUNGLE_GRAPE_WINE);
+        registerFluidIfAvailable("white_jungle_grape_wine", ModVineryContent.WHITE_JUNGLE_GRAPE_WINE);
     }
     
     /**
@@ -123,14 +137,15 @@ public class ModCoreFluids {
      * Vérifie si un fluide est un fluide Core (toujours disponible)
      */
     public static boolean isCoreFluid(String fluidId) {
-        return fluidId.equals("apple_juice") || fluidId.equals("cherry_juice");
+        return fluidId.equals("apple_juice") || fluidId.equals("cherry_juice") ||
+               fluidId.equals("apple_wine") || fluidId.equals("cherry_wine");
     }
     
     /**
      * Vérifie si un fluide est un fluide Vinery (conditionnel)
      */
     public static boolean isVineryFluid(String fluidId) {
-        return fluidId.contains("grape_juice");
+        return fluidId.contains("grape_juice") || fluidId.contains("grape_wine");
     }
     
     public static void register() {
